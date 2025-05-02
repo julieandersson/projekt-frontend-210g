@@ -2,7 +2,8 @@
 function Footer() {
   return (
     <footer>
-        <p>Av Julie Andersson</p>
+        <p>Recensera Mera <br />
+          Av Julie Andersson</p>
     </footer>
   )
 }

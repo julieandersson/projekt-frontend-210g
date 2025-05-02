@@ -4,6 +4,9 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MyProfilePage from "./pages/MyProfilePage";
 import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
+import CreateReviewPage from "./pages/CreateReviewPage";
+import BookDetailsPage from "./pages/BookDetailsPage";
 
 const router = createBrowserRouter( [
     {
@@ -15,6 +18,10 @@ const router = createBrowserRouter( [
                 element: <HomePage />
             },
             {
+                path: "/bok/:id",
+                element: <BookDetailsPage />
+            },
+            {
                 path: "/logga-in",
                 element: <LoginPage />
             },
@@ -24,7 +31,20 @@ const router = createBrowserRouter( [
             },
             {
                 path: "/min-profil",
-                element: <MyProfilePage />
+                element: (
+                    <ProtectedRoute> {/* skyddad route för att visa användarens profil */ }
+                        <MyProfilePage />
+                    </ProtectedRoute>
+                )
+                
+            },
+            {
+                path: "/skapa-recension",
+                element: (
+                    <ProtectedRoute> {/* skyddad route för att skapa en recension */ }
+                        <CreateReviewPage />
+                    </ProtectedRoute>
+                )
             }
         ]
     }
