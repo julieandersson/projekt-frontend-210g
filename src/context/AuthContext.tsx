@@ -29,13 +29,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             const data = await res.json() as AuthResponse;
             console.log("Data från registrering: ", data);
     
-            if (data.user) {
-                setUser(data.user); // sätter användartillstånd
-            } else {
-                console.error("Misslyckad registrering");
-                throw new Error("Fel vid registrering");
-            }
-    
         } catch (error) {
             console.error("Fel vid registrering: ", error);
             throw new Error("Fel vid registrering");
