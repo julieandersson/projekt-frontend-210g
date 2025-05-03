@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext'; // importera AuthContext för hantering av autentisering
 import { useNavigate } from 'react-router-dom'; // för att navigera efter inloggning
 
@@ -8,8 +8,15 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const {login} = useAuth(); // hämtar inloggningsfunktionen från AuthContext
+  const {login, user} = useAuth(); // hämtar inloggningsfunktionen från AuthContext
   const navigate = useNavigate(); // för att navigera till andra sidor
+
+  // kontrollerar användare
+  useEffect(() => {
+    if (user) {
+      navigate('/min-profil'); // om användaren redan är inloggad, navigera till profil direkt
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // förhindrar att sidan laddas om vid formulärinlämning

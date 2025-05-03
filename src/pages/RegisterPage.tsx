@@ -1,5 +1,5 @@
 
-function RegisterPage() {
+const RegisterPage = () =>{
   return (
     <div>
       <h1>Registrera konto</h1>

@@ -1,5 +1,5 @@
 
-function HomePage() {
+const HomePage = () =>{
   return (
     <div>
       <h1>Startsida</h1>

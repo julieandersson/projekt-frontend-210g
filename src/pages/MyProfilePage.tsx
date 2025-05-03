@@ -1,7 +1,12 @@
+import { useAuth } from "../context/AuthContext"
 
-function MyProfilePage() {
+
+const MyProfilePage = () => {
+
+  const { user } = useAuth(); // hämtar användardata från AuthContext
   return (
     <div>
+      <p>Hej och välkommen {user ? user.username : "" }!</p>
       <h1>Min profil</h1>
     </div>
   )

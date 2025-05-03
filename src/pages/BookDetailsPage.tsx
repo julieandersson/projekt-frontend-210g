@@ -1,5 +1,5 @@
 
-function BookDetailsPage() {
+const BookDetailsPage = () =>{
   return (
     <div>
       
