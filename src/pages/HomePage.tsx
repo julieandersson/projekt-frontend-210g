@@ -1,6 +1,11 @@
 import BookGallery from "../components/BookGallery";
+import { useSearchParams } from "react-router-dom";
 
 const HomePage = () => {
+  const [searchParams] = useSearchParams(); // hämtar sökparametrar från URL
+  // Hämtar sidnummer från sökparameter, om det inte finns så sätts det till 1
+  const page = Number(searchParams.get("page")) || 1;
+
   return (
     <>
     <h1>Recensera Mera</h1>
@@ -10,7 +15,7 @@ const HomePage = () => {
         </p>
       </section>
       <h2 className="text-2xl font-bold mb-6">Upptäck böcker</h2>
-      <BookGallery search="subject:mystery" />
+      <BookGallery search="subject:mystery" initialPage={page} />
     </>
   );
 };

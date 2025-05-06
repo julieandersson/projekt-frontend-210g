@@ -1,10 +1,12 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import banner from "../assets/banner.jpg";
 
-function Header() {
+const Header = () => {
   const { user, logout } = useAuth();
 
   return (
+    <>
     <header>
       <nav>
         <ul>
@@ -36,6 +38,14 @@ function Header() {
         </ul>
       </nav>
     </header>
+
+    <img 
+      src={banner} 
+      alt="banner" 
+      className="header-banner" 
+      />
+      
+    </>
   );
 }
 
