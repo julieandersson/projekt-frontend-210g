@@ -1,17 +1,11 @@
-import { useParams, useSearchParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BookInterface } from "../types/BookInterface";
 
 const BookDetailsPage = () => {
   const { id } = useParams(); // hämtar bok-ID från URL
-
   //state för att lagra bokinformation
   const [book, setBook] = useState<BookInterface | null>(null);
-
-  // hämtar sökparameter "page" från url för att kunna gå tillbaka till rätt sida
-  const [searchParams] = useSearchParams();
-  const page = searchParams.get("page") || "1";
-
   // states för laddning och fel
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -25,7 +19,6 @@ const BookDetailsPage = () => {
         if (!res.ok) throw new Error("Något gick fel vid hämtning");
         const data = await res.json();
         setBook(data); // sparar bokinformation i state
-
       } catch (err) {
         setError("Kunde inte hämta bokinformationen."); // sätter felmeddelande
       } finally {
@@ -46,12 +39,10 @@ const BookDetailsPage = () => {
   return (
     <section>
       <h2>{info.title}</h2>
-
       {/* visar bokomslag om bild finns */}
       {info.imageLinks?.thumbnail && (
         <img src={info.imageLinks.thumbnail} alt={info.title} />
       )}
-
       {/* visar info om boken */}
       <p><strong>Författare:</strong> {info.authors?.join(", ") || "Okänd"}</p>
       <p><strong>Utgivningsår:</strong> {info.publishedDate?.slice(0, 4) || "Saknas"}</p>
@@ -60,10 +51,8 @@ const BookDetailsPage = () => {
       <p><strong>Språk:</strong> {info.language?.toUpperCase() || "Saknas"}</p>
       <p><strong>Kategorier:</strong> {info.categories?.join(", ") || "Saknas"}</p>
 
-      {/* tillbaka-"knapp" för att gå tillbaka till föregående sida med korrekt sidnummer */}
-      <Link to={`/?page=${page}`} className="backButton">
-        Tillbaka
-      </Link>
+      {/* tillbaka-"knapp" för att gå tillbaka till startsidan */}
+      <Link to="/" className="backButton">Tillbaka till startsidan</Link>
     </section>
   );
 };

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { BookInterface } from "../types/BookInterface";
 import { Link, useNavigate } from "react-router-dom";
+import { BookGalleryProps } from "../types/BookGalleryProps";
 import "./css/BookGallery.css";
 
 const ITEMS_PER_PAGE = 20; // sätter antalet böcker som visas per sida
 
-// Funktion för att hämta böcker från Google Books API (baserat på sökterm, implementeras senare)
+// Funktion för att hämta böcker från Google Books API (baserat på sökterm, antal och offset)
 const loadBooks = async (searchTerm: string, limit = ITEMS_PER_PAGE, offset = 0) => {
     try {
         const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&maxResults=${limit}&startIndex=${offset}`);
@@ -20,12 +21,7 @@ const loadBooks = async (searchTerm: string, limit = ITEMS_PER_PAGE, offset = 0)
     }
 };
 
-interface Props {
-    search: string; // sökterm som skickas in som prop
-    initialPage?: number; // valfri prop för att sätta initial sida
-}
-
-const BookGallery = ({ search, initialPage }: Props) => {
+const BookGallery = ({ search, initialPage }: BookGalleryProps) => {
     const navigate = useNavigate();
 
     // states för lista med böcker, aktuell sida, total antal träffar, laddning och fel
@@ -42,7 +38,12 @@ const BookGallery = ({ search, initialPage }: Props) => {
         const fetchAndSetBooks = async () => {
             setLoading(true);
             setError("");
-            const actualQuery = search.trim();
+            
+            // skapar korrekt söksträng 
+            const actualQuery = search.trim().includes("subject:")
+                ? search.trim()
+                : `intitle:${search.trim()}`;
+
             const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
             const { items, total } = await loadBooks(actualQuery, ITEMS_PER_PAGE, offset);
@@ -59,9 +60,12 @@ const BookGallery = ({ search, initialPage }: Props) => {
         fetchAndSetBooks();
     }, [search, currentPage]);
 
+    // uppdaterar sidnumret i url utan att ta bort andra parametrar
     useEffect(() => {
-        navigate(`/?page=${currentPage}`, { replace: true });
-    }, [currentPage, navigate]);
+        const params = new URLSearchParams(window.location.search);
+        params.set("page", currentPage.toString());
+        navigate(`?${params.toString()}`, { replace: true });
+    }, [currentPage, navigate]);    
 
     return (
         <section className="galleryContainer">
@@ -98,23 +102,23 @@ const BookGallery = ({ search, initialPage }: Props) => {
                 </div>
             )}
 
-                {/* Pagnisering */}
-                <div className="paginationControls">
-                    <button
-                        disabled={currentPage === 1}
-                        onClick={() => setCurrentPage((p) => p - 1)}
-                    >
-                        &laquo; Föregående
-                    </button>
+            {/* Pagninering */}
+            <div className="paginationControls">
+                <button
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage((p) => p - 1)}
+                >
+                    &laquo; Föregående
+                </button>
 
-                    {/* dynamisk sidintervall */}
-                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                        const startPage = Math.max(1, Math.min(currentPage - 2, totalPages - 4));
-                        const pageNum = startPage + i;
+                {/* dynamisk sidintervall, max 5 visas åt gången */}
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    const startPage = Math.max(1, Math.min(currentPage - 2, totalPages - 4));
+                    const pageNum = startPage + i;
 
-                        if (pageNum > totalPages) return null;
+                    if (pageNum > totalPages) return null;
 
-                        return (
+                    return (
                         <button
                             key={pageNum}
                             className={pageNum === currentPage ? "active" : ""}
@@ -122,16 +126,16 @@ const BookGallery = ({ search, initialPage }: Props) => {
                         >
                             {pageNum}
                         </button>
-                        );
-                    })}
+                    );
+                })}
 
-                    <button
-                        disabled={currentPage >= totalPages}
-                        onClick={() => setCurrentPage((p) => p + 1)}
-                    >
-                        Nästa &raquo;
-                    </button>
-                </div>
+                <button
+                    disabled={currentPage >= totalPages}
+                    onClick={() => setCurrentPage((p) => p + 1)}
+                >
+                    Nästa &raquo;
+                </button>
+            </div>
         </section>
     );
 };
