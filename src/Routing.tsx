@@ -5,7 +5,6 @@ import RegisterPage from "./pages/RegisterPage";
 import MyProfilePage from "./pages/MyProfilePage";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
-import CreateReviewPage from "./pages/CreateReviewPage";
 import BookDetailsPage from "./pages/BookDetailsPage";
 
 const router = createBrowserRouter( [
@@ -37,14 +36,6 @@ const router = createBrowserRouter( [
                     </ProtectedRoute>
                 )
                 
-            },
-            {
-                path: "/skapa-recension",
-                element: (
-                    <ProtectedRoute> {/* skyddad route för att skapa en recension */ }
-                        <CreateReviewPage />
-                    </ProtectedRoute>
-                )
             }
         ]
     }

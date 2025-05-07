@@ -1,40 +1,70 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BookInterface } from "../types/BookInterface";
+import ReviewForm from "../components/ReviewForm";
+import { Review } from "../types/ReviewInterface";
+import { useAuth } from "../context/AuthContext";
 
 const BookDetailsPage = () => {
   const { id } = useParams(); // hämtar bok-ID från URL
-  //state för att lagra bokinformation
-  const [book, setBook] = useState<BookInterface | null>(null);
-  // states för laddning och fel
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const { user } = useAuth(); // hämtar användarinformation
 
-  // useEffect som körs när komponenten mounta
-  useEffect(() => {
-    // hämtar bokinformation från Google Books API
-    const getBook = async () => {
+  //states för att lagra bokinformation och recensioner
+  const [book, setBook] = useState<BookInterface | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
+
+  // states för laddning och fel
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+
+  // hämtar bokinformation från Google Books API
+  const getBook = async () => {
+    setLoading(true);
       try {
         const res = await fetch(`https://www.googleapis.com/books/v1/volumes/${id}`);
         if (!res.ok) throw new Error("Något gick fel vid hämtning");
         const data = await res.json();
-        setBook(data); // sparar bokinformation i state
+        setBook(data);
       } catch (err) {
-        setError("Kunde inte hämta bokinformationen."); // sätter felmeddelande
+        setError("Kunde inte hämta bokinformationen.");
       } finally {
-        setLoading(false); // sätter loading till false när hämtning är klar
+        setLoading(false);
+      }
+  };
+
+  // hämtar recensioner för aktuell bok
+  const getReviews = async () => {
+    setReviewsLoading(true);
+      try {
+        const res = await fetch("http://localhost:3000/reviews", {
+          credentials: "include"
+        });
+        
+        if (!res.ok) throw new Error("Kunde inte hämta recensioner");
+        const data: Review[] = await res.json();
+        const filtered = data.filter((r) => r.bookId === id);
+        setReviews(filtered);
+
+      } catch (err) {
+        console.error("Fel vid hämtning av recensioner:", err);
+      } finally {
+        setReviewsLoading(false);
       }
     };
 
-    getBook();
-  }, [id]); // beroende av bok-ID
+    // körs när sidan mountas
+    useEffect(() => {
+      getBook();
+      getReviews();
+    }, [id]); // beroende av bok-ID
 
-  // visar laddningsmeddelande eller felmeddelande
-  if (loading) return <p>Laddar bokinformation...</p>;
-  if (error || !book) return <p>{error || "Ingen bokinformation hittades."}</p>;
+    // visar laddningsmeddelande eller felmeddelande
+    if (loading) return <p>Laddar bokinformation...</p>;
+    if (error || !book) return <p>{error || "Ingen bokinformation hittades."}</p>;
 
-  // extraherar volumeInfo från bokobjektet
-  const info = book.volumeInfo;
+    // extraherar volumeInfo från bokobjektet
+    const info = book.volumeInfo;
 
   return (
     <section>
@@ -50,10 +80,48 @@ const BookDetailsPage = () => {
       <p><strong>Antal sidor:</strong> {info.pageCount || "Okänt"}</p>
       <p><strong>Språk:</strong> {info.language?.toUpperCase() || "Saknas"}</p>
       <p><strong>Genrer:</strong> {info.categories?.join(", ") || "Saknas"}</p>
-      <p><strong>Beskrivning:</strong> {info.description || "Ingen beskrivning tillgänglig."}</p>
+      
+      {/* renderar beskrivningen som HTML med dangerouslySetInnerHTML */}
+      <div>
+        <strong>Beskrivning:</strong>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: info.description || "Ingen beskrivning tillgänglig."
+          }}
+        />
+      </div>
 
       {/* tillbaka-"knapp" för att gå tillbaka till startsidan */}
       <Link to="/" className="backButton">Tillbaka till startsidan</Link>
+
+      <hr />
+
+      <h3>Recensioner</h3>
+        {reviewsLoading ? (
+          <p>Laddar recensioner...</p>
+        ) : reviews.length === 0 ? (
+          <p>Inga recensioner ännu.</p>
+        ) : (
+          /* tillfällig utskrift av recensioner just nu */
+          <ul>
+            {reviews.map((r) => (
+              <li key={r._id}>
+                <strong>{r.username}</strong> ({r.rating}/5)
+                <br />
+                {r.reviewText}
+                <hr />
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {user && (
+          <ReviewForm
+            bookId={id || ""}
+            bookTitle={info.title}
+            onReviewSubmit={getReviews}
+          />
+        )}
     </section>
   );
 };
