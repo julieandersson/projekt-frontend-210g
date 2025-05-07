@@ -49,7 +49,8 @@ const BookDetailsPage = () => {
       <p><strong>Förlag:</strong> {info.publisher || "Saknas"}</p>
       <p><strong>Antal sidor:</strong> {info.pageCount || "Okänt"}</p>
       <p><strong>Språk:</strong> {info.language?.toUpperCase() || "Saknas"}</p>
-      <p><strong>Kategorier:</strong> {info.categories?.join(", ") || "Saknas"}</p>
+      <p><strong>Genrer:</strong> {info.categories?.join(", ") || "Saknas"}</p>
+      <p><strong>Beskrivning:</strong> {info.description || "Ingen beskrivning tillgänglig."}</p>
 
       {/* tillbaka-"knapp" för att gå tillbaka till startsidan */}
       <Link to="/" className="backButton">Tillbaka till startsidan</Link>
