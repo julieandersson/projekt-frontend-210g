@@ -80,7 +80,7 @@ const BookDetailsPage = () => {
       <p><strong>Antal sidor:</strong> {info.pageCount || "Okänt"}</p>
       <p><strong>Språk:</strong> {info.language?.toUpperCase() || "Saknas"}</p>
       <p><strong>Genrer:</strong> {info.categories?.join(", ") || "Saknas"}</p>
-      
+
       {/* renderar beskrivningen som HTML med dangerouslySetInnerHTML */}
       <div>
         <strong>Beskrivning:</strong>
@@ -106,7 +106,9 @@ const BookDetailsPage = () => {
           <ul>
             {reviews.map((r) => (
               <li key={r._id}>
-                <strong>{r.username}</strong> ({r.rating}/5)
+                <strong>{r.username}</strong>
+                <br />
+                {r.rating}/5
                 <br />
                 {r.reviewText}
                 <hr />
