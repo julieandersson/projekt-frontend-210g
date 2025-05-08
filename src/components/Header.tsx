@@ -1,52 +1,69 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import banner from "../assets/banner.jpg";
+import logo from "../assets/logo.png";
+import "./css/Header.css";
 
 const Header = () => {
   const { user, logout } = useAuth();
 
   return (
     <>
-    <header>
-      <nav>
-        <ul>
-          <li>
-            <NavLink to="/">Startsida</NavLink>
-          </li>
+      <header>
+        <nav>
+          <ul>
+            <li className="logo-wrapper">
+              <NavLink to="/">
+                <img src={logo} alt="Logotyp" className="logo" />
+              </NavLink>
+            </li>
 
-          {!user ? (
-            // meny för utloggad användare
-            <>
-              <li>
-                <NavLink to="/logga-in">Logga in</NavLink>
-              </li>
-              <li>
-                <NavLink to="/registrera">Skapa konto</NavLink>
-              </li>
-            </>
-          ) : (
-            // meny för inloggad användare
-            <>
-              <li>
-                <NavLink to="/min-profil">Mina sidor</NavLink>
-              </li>
-              <li>
-                <button onClick={logout}>Logga ut</button>
-              </li>
-            </>
-          )}
-        </ul>
-      </nav>
-    </header>
+            <li>
+              <NavLink to="/">
+              <i className="fa-solid fa-book" style={{ marginRight: "0.5rem" }}></i>
+              Startsida
+              </NavLink>
+            </li>
 
-    <img 
-      src={banner} 
-      alt="banner" 
-      className="header-banner" 
+            {!user ? (
+              <>
+                <li>
+                <NavLink to="/logga-in">
+                  <i className="fa-solid fa-arrow-right-to-bracket" style={{ marginRight: "0.5rem" }}></i>
+                  Logga in
+                </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/registrera">
+                  <i className="fa-solid fa-user-plus" style={{ marginRight: "0.5rem" }}></i>
+                  Skapa konto
+                  </NavLink>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <NavLink to="/min-profil">
+                  <i className="fa-solid fa-user" style={{ marginRight: "0.5rem" }}></i>
+                  Mina sidor
+                  </NavLink>
+                </li>
+                <li>
+                  <button onClick={logout}>Logga ut</button>
+                </li>
+              </>
+            )}
+          </ul>
+        </nav>
+      </header>
+
+      <img 
+        src={banner} 
+        alt="banner" 
+        className="header-banner" 
       />
-      
     </>
   );
-}
+};
 
 export default Header;
