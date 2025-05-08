@@ -13,10 +13,12 @@ const BookDetailsPage = () => {
   const [book, setBook] = useState<BookInterface | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
 
-  // states för laddning och fel
+  // states för laddning, fel och gillningar
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [likesCount, setLikesCount] = useState(0);
+  const [hasLiked, setHasLiked] = useState(false);
 
   // hämtar bokinformation från Google Books API
   const getBook = async () => {
@@ -31,6 +33,62 @@ const BookDetailsPage = () => {
       } finally {
         setLoading(false);
       }
+  };
+
+  // hämtar antal gillningar för aktuell bok
+  const getLikesCount = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/bookLikes/${id}`);
+      if (!res.ok) throw new Error("Kunde inte hämta gillningar");
+      const data = await res.json();
+      setLikesCount(data.likes);
+    } catch (err) {
+      console.error("Fel vid hämtning av gillningar:", err);
+    }
+  };
+
+  // kollar om inloggad användare har gillat den aktuella boken
+  const getUserHasLiked = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/bookLikes/user-likes", {
+        credentials: "include",
+      });
+      const data = await res.json();
+      const liked = data.some((like: { bookId: string }) => like.bookId === id); // söker efter matchande bokId
+      setHasLiked(liked); // true/false beroende på resultat
+    } catch (err) {
+      console.error("Kunde inte kontrollera gillning:", err);
+    }
+  };
+
+  // funktion för att gilla boken
+  const postLike = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/bookLikes/${id}`, {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Gillning misslyckades.");
+      setHasLiked(true); // uppdaterar knappens tillstånd
+      getLikesCount(); // uppdaterar antal likes
+    } catch (err) {
+      console.error("Fel vid gillning:", err);
+    }
+  };
+
+  // funktion för att ta bort gillning 
+  const deleteLike = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/bookLikes/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Kunde inte ta bort gillning");
+      setHasLiked(false); // uppdaterar knappens tillstånd
+      getLikesCount(); // uppdateras antal likes
+    } catch (err) {
+      console.error("Fel vid borttagning av gillning:", err);
+    }
   };
 
   // hämtar recensioner för aktuell bok
@@ -57,7 +115,9 @@ const BookDetailsPage = () => {
     useEffect(() => {
       getBook();
       getReviews();
-    }, [id]); // beroende av bok-ID
+      getLikesCount();
+      if (user) getUserHasLiked(); // kollar om boken är gillad av användaren som är inloggad
+    }, [id, user]);    
 
     // visar laddningsmeddelande eller felmeddelande
     if (loading) return <p>Laddar bokinformation...</p>;
@@ -74,6 +134,15 @@ const BookDetailsPage = () => {
         <img src={info.imageLinks.thumbnail} alt={info.title} />
       )}
       {/* visar info om boken */}
+      <p><strong>{likesCount} användare har gillat denna bok</strong></p>
+
+      {/* knapp som visas för inloggade användare */}
+      {user && (
+        <button onClick={hasLiked ? deleteLike : postLike}>
+          {hasLiked ? "Ta bort gillning" : "Gilla denna bok"}
+        </button>
+      )}
+
       <p><strong>Författare:</strong> {info.authors?.join(", ") || "Okänd"}</p>
       <p><strong>Utgivningsår:</strong> {info.publishedDate?.slice(0, 4) || "Saknas"}</p>
       <p><strong>Förlag:</strong> {info.publisher || "Saknas"}</p>

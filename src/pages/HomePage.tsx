@@ -71,9 +71,11 @@ const HomePage = () => {
       </section>
 
       <h2>Sök eller filtrera böcker</h2>
+      <section>
       <p>
         Använd sökfältet för att hitta specifika böcker eller bläddra genom olika genrer.
       </p>
+      </section>
 
       {/* Sökfält med förifyllt värde från URL */}
       <SearchForm initialValue={queryParam} onSearch={handleSearch} />
