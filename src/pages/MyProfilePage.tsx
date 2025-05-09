@@ -100,10 +100,18 @@ const MyProfilePage = () => {
 
   return (
     <div>
+      <section>
       <p>Hej och välkommen {user?.username}!</p>
-      <h1>Min profil</h1>
-      <h2>Mina recensioner</h2>
+      </section>
 
+      <h1>Min profil</h1>
+      <br />
+      
+      <section>
+      <h2>Mina recensioner</h2>
+        <p>
+          Här samlas alla recensioner du har skrivit, lättöverskådligt på ett och samma ställe. Du kan när som helst redigera innehållet i en recension eller ta bort den helt om du ångrat dig. Håll koll på dina åsikter och uppdatera dem när det passar dig!
+        </p>
       {/* visar laddning, fel eller bekräftelsemeddelande */}
       {loading && <p>Laddar dina recensioner...</p>}
       {error && <p className="error">{error}</p>}
@@ -111,7 +119,7 @@ const MyProfilePage = () => {
 
       {/* visar meddelande om inga recensioner finns */}
       {!loading && !error && userReviews.length === 0 && (
-        <p>Du har inte skrivit några recensioner ännu.</p>
+        <p style={{ fontStyle: "italic", textAlign: "center" }}>Du har inte skrivit några recensioner ännu.</p>
       )}
 
       {/* importerar användarens recensioner från komponent */}
@@ -125,17 +133,18 @@ const MyProfilePage = () => {
           />
         ))}
       </ul>
-      <h2>Mina gillade böcker</h2>
+      </section>
+      
       <section>
+      <h2>Mina gillade böcker</h2>
         <p>
           Har du hittat en bok du gillar eller vill spara för att läsa senare? På varje boksida kan du klicka på hjärtikonen för att gilla boken. Alla dina gillade böcker samlas här nedan så att du enkelt kan hitta tillbaka till dem.
         </p>
-      </section>
         <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
           {loadingLikes ? (
             <p>Laddar gillade böcker...</p>
           ) : likedBooksDetails.length === 0 ? (
-            <p>Du har inte gillat några böcker ännu.</p>
+            <p style={{ fontStyle: "italic", textAlign: "center" }}>Du har inte gillat några böcker ännu.</p>
           ) : (
             // renderar gillade böcker med bild, titel och "ta bort gillning"-knapp
             likedBooksDetails.map((book) => (
@@ -149,6 +158,7 @@ const MyProfilePage = () => {
             ))
           )}
         </div>
+      </section>
     </div>
   );
 };

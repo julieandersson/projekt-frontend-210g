@@ -133,7 +133,7 @@ const ReviewForm = ({ bookId, bookTitle, onReviewSubmit }: ReviewFormProps) => {
         </div>
 
 
-      <button type="submit">Skicka recension</button>
+      <button type="submit" className="reviewButton">Skicka recension</button>
     </form>
   );
 };
