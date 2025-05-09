@@ -27,7 +27,7 @@ const SearchForm = ({ onSearch, initialValue = "" }: SearchFormProps) => {
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ex. Harry Potter..."
         />
-        <button type="submit">Sök</button>
+        <button type="submit" className="searchButton">Sök</button>
       </form>
     );
   };

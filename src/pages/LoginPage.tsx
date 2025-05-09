@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext'; // importera AuthContext för hantering av autentisering
 import { useNavigate } from 'react-router-dom'; // för att navigera efter inloggning
+import { Link } from "react-router-dom";
+import "./css/LoginPage.css";
+import "../components/css/FormStyle.css";
 
 const LoginPage = () => {
   // State för att hantera inloggningsuppgifter och felmeddelanden
@@ -52,36 +55,40 @@ const LoginPage = () => {
           )}
 
           {/* E-postfält */}
-          <div className="form-group">
-            <label htmlFor="email">E-postadress</label>
-            <input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={loading} // inaktiverar under inloggning
-            />
-          </div>
+          <label htmlFor="email">E-postadress</label>
+          <input
+            id="email"
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={loading} // inaktiverar under inloggning
+            className="form-input"
+          />
 
           {/* Lösenordsfält */}
-          <div className="form-group">
-            <label htmlFor="password">Lösenord</label>
-            <input
-              id="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={loading} // inaktiverar under inloggning
-            />
-          </div>
+          <label htmlFor="password">Lösenord</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={loading} // // inaktiverar under inloggning
+            className="form-input"
+          />
 
           {/* Logga in */}
           <button type="submit" disabled={loading}>
             {loading ? 'Loggar in...' : 'Logga in'}
           </button>
         </form>
+        
+        {/* länk till skapa konto */}
+        <p style={{ marginTop: '1rem', textAlign: 'center' }}>
+          Har du inget konto?{' '}
+          <Link to="/registrera" style={{ color: '#007bff', textDecoration: 'none' }}>
+            Registrera dig här
+          </Link>
+        </p>
       </div>
     </div>
   );

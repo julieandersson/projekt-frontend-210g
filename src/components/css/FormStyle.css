@@ -1,0 +1,68 @@
+/* Gemensam css-fil för logga in och skapa konto-formulär */
+
+label {
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #444;
+}
+  
+.form-input {
+  width: 95%;
+  padding: 0.625rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.2s ease;
+  background-color: #eef4ff;
+}
+  
+.form-input:focus {
+  border-color: #007bff;
+  outline: none;
+  background-color: #ffffff;
+}
+  
+button[type="submit"] {
+  width: 100%;
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  background-color: #435e7a;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+  
+button[type="submit"]:hover:not(:disabled) {
+  background-color: #304862;
+}
+  
+button[type="submit"]:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+  
+.error-message {
+  background-color: #f8d7da;
+  color: #842029;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  border: 1px solid #f5c2c7;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+  
+.success-message {
+  background-color: #d1e7dd;
+  color: #0f5132;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #badbcc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}

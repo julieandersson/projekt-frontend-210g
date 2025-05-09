@@ -3,7 +3,10 @@ import { useAuth } from '../context/AuthContext'; // hämtar register-funktion f
 import { useNavigate } from 'react-router-dom';
 import { RegisterFormData } from '../types/RegisterInterface'; // importerar interface för registreringsformulär
 import { ErrorsData } from '../types/ErrorsInterface'; // importerar interface för felmeddelanden
+import { Link } from "react-router-dom";
 import * as Yup from 'yup'; // importerar Yup för validering
+import "./css/RegisterForm.css";
+import "./css/FormStyle.css";
 
 const RegisterForm = () => {
     // state för att lagra registreringsformulärdata
@@ -71,56 +74,84 @@ const RegisterForm = () => {
       }
     }
   };
-
+  
   return (
-    <form onSubmit={registerForm}>
-        {/* visar bekräftelsemeddelande efter lyckad registrering */}
-        {confirmationMessage && <p className="success">{confirmationMessage}</p>}
+    <div className="register-container">
+      <div className="register-box">
+        <h2>Skapa konto</h2>
 
-        {/* fält för användarnamn */}
-      <div className="form-group">
-        <label htmlFor="username">Användarnamn</label>
-        <input
-          id="username"
-          type="text"
-          value={registerFormData.username}
-          onChange={(e) =>
-            setRegisterFormData({ ...registerFormData, username: e.target.value })
-          }
-        />
-        {errors.username && <p className="error">{errors.username}</p>}
+        <form onSubmit={registerForm}>
+          {/* visar bekräftelsemeddelande efter lyckad registrering */}
+          {confirmationMessage && (
+            <div className="success-message">{confirmationMessage}</div>
+          )}
+
+          {/* fält för användarnamn */}
+          <label htmlFor="username">Användarnamn</label>
+          <input
+            id="username"
+            type="text"
+            value={registerFormData.username}
+            onChange={(e) =>
+              setRegisterFormData({
+                ...registerFormData,
+                username: e.target.value,
+              })
+            }
+            className="form-input"
+          />
+          {errors.username && (
+            <p className="error-message">{errors.username}</p>
+          )}
+
+          {/* fält för e-postadress */}
+          <label htmlFor="email">E-postadress</label>
+          <input
+            id="email"
+            type="text"
+            value={registerFormData.email}
+            onChange={(e) =>
+              setRegisterFormData({
+                ...registerFormData,
+                email: e.target.value,
+              })
+            }
+            className="form-input"
+          />
+          {errors.email && <p className="error-message">{errors.email}</p>}
+
+          {/* fält för lösenord */}
+          <label htmlFor="password">Lösenord</label>
+          <input
+            id="password"
+            type="password"
+            value={registerFormData.password}
+            onChange={(e) =>
+              setRegisterFormData({
+                ...registerFormData,
+                password: e.target.value,
+              })
+            }
+            className="form-input"
+          />
+          {errors.password && <p className="error-message">{errors.password}</p>}
+
+          {/* Skapa konto */}
+          <button type="submit">Skapa konto</button>
+        </form>
+
+        {/* länk till logga in */}
+        <p style={{ marginTop: "1rem", textAlign: "center" }}>
+          Har du redan ett konto?{" "}
+          <Link
+            to="/logga-in"
+            style={{ color: "#007bff", textDecoration: "none" }}
+          >
+            Logga in här
+          </Link>
+        </p>
       </div>
-
-      {/* fält för e-postadress */}
-      <div className="form-group">
-        <label htmlFor="email">E-postadress</label>
-        <input
-          id="email"
-          type="text"
-          value={registerFormData.email}
-          onChange={(e) =>
-            setRegisterFormData({ ...registerFormData, email: e.target.value })
-          }
-        />
-        {errors.email && <p className="error">{errors.email}</p>}
-      </div>
-
-      {/* fält för lösenord */}
-      <div className="form-group">
-        <label htmlFor="password">Lösenord</label>
-        <input
-          id="password"
-          type="password"
-          value={registerFormData.password}
-          onChange={(e) =>
-            setRegisterFormData({ ...registerFormData, password: e.target.value })
-          }
-        />
-        {errors.password && <p className="error">{errors.password}</p>}
-      </div>
-
-      <button type="submit">Skapa konto</button>
-    </form>
+    </div>
   );
 };
 

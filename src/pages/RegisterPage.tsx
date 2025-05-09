@@ -14,12 +14,9 @@ const RegisterPage = () => {
   }, [user, navigate]);
 
   return (
-    <div className="register-container">
-      <div className="register-box">
-        <h2>Skapa konto</h2>
+      <>
         <RegisterForm />
-      </div>
-    </div>
+      </>
   );
 };
 
