@@ -1,11 +1,25 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useState } from "react";
 import banner from "../assets/banner.jpg";
 import logo from "../assets/logo.png";
 import "./css/Header.css";
 
 const Header = () => {
   const { user, logout } = useAuth();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Fel vid utloggning:", error);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <>
@@ -49,7 +63,9 @@ const Header = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <button onClick={logout}>Logga ut</button>
+                  <button onClick={handleLogout} disabled={isLoggingOut}>
+                    {isLoggingOut ? "Loggar ut..." : "Logga ut"}
+                  </button>
                 </li>
               </>
             )}

@@ -7,6 +7,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const {login, user} = useAuth(); // hämtar inloggningsfunktionen från AuthContext
   const navigate = useNavigate(); // för att navigera till andra sidor
@@ -21,6 +22,7 @@ const LoginPage = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // förhindrar att sidan laddas om vid formulärinlämning
     setError(''); // återställer ev felmeddelanden
+    setLoading(true);
 
     try {
 
@@ -30,6 +32,8 @@ const LoginPage = () => {
     } catch(error) {
       // hanterar fel vid inloggning
       setError('Inloggning misslyckades. Kontrollera dina uppgifter och försök igen.');
+    } finally {
+      setLoading(false);
     }
     
   };
@@ -56,6 +60,7 @@ const LoginPage = () => {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={loading} // inaktiverar under inloggning
             />
           </div>
 
@@ -68,11 +73,14 @@ const LoginPage = () => {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={loading} // inaktiverar under inloggning
             />
           </div>
 
           {/* Logga in */}
-          <button type="submit">Logga in</button>
+          <button type="submit" disabled={loading}>
+            {loading ? 'Loggar in...' : 'Logga in'}
+          </button>
         </form>
       </div>
     </div>
