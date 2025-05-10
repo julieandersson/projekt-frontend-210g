@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"; // för att länka till bokens detaljsida
+import "./css/LikedBookItem.css";
 
 // props för varje gillad bok
 interface LikedBookItemProps {
@@ -12,16 +13,17 @@ interface LikedBookItemProps {
 // komponent som visar en gillad bok med bild, titel och ta bort gillning-knapp
 const LikedBookItem = ({ id, title, thumbnail, onUnlike }: LikedBookItemProps) => {
   return (
-    <div style={{ border: "1px solid #ccc", padding: "1rem" }}>
+    <div className="liked-book-card">
       {/* länk till bokens detaljsida */}
       <Link to={`/bok/${id}`}>
-        {thumbnail && <img src={thumbnail} alt={title} style={{ width: "100px" }} />}
+        {thumbnail && <img src={thumbnail} alt={title} />}
         <p><strong>{title}</strong></p>
       </Link>
+  
       {/* knapp för att avgilla, anropar förälderns delete-funktion */}
-      <button onClick={() => onUnlike(id)}>Ta bort gillning</button>
+      <button onClick={() => onUnlike(id)}><i className="fa-solid fa-heart-circle-xmark"></i> Ta bort gillning</button>
     </div>
-  );
+  );  
 };
 
 export default LikedBookItem;

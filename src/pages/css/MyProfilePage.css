@@ -1,0 +1,19 @@
+.liked-books-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 kolumner som standard */
+    gap: 3rem;
+    padding: 0.5rem;
+}
+ 
+/* media queries */ 
+ @media (max-width: 900px) {
+    .liked-books-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+}
+  
+@media (max-width: 600px) {
+    .liked-books-grid {
+      grid-template-columns: 1fr;
+    }
+}  

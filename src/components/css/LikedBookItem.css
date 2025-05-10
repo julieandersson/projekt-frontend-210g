@@ -1,0 +1,58 @@
+/* bok-kort */
+.liked-book-card {
+    width: 90%;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}  
+  
+  
+.liked-book-card:hover {
+    transform: scale(1.02);
+}
+  
+.liked-book-card img {
+    width: 100px;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+}
+  
+.liked-book-card p {
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0.5rem 0;
+}
+
+/* ta bort gillning-knapp */
+.liked-book-card button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+  
+.liked-book-card button:hover {
+    opacity: 0.9;
+}
+  
+.liked-book-card a {
+    color: inherit;
+    text-decoration: none;
+}
+  
+.liked-book-card a:hover {
+    text-decoration: underline;
+}

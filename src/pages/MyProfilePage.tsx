@@ -4,6 +4,7 @@ import { Review } from "../types/ReviewInterface";
 import { Like } from "../types/BookLike";
 import UserReviewItem from "../components/UserReviewItem"; // importerar UserReviewItem
 import LikedBookItem from "../components/LikedBookItem";
+import "./css/MyProfilePage.css";
 
 const MyProfilePage = () => {
   const { user } = useAuth(); // hämtar aktuell inloggad användare
@@ -112,17 +113,18 @@ const MyProfilePage = () => {
         <p>
           Här samlas alla recensioner du har skrivit, lättöverskådligt på ett och samma ställe. Du kan när som helst redigera innehållet i en recension eller ta bort den helt om du ångrat dig. Håll koll på dina åsikter och uppdatera dem när det passar dig!
         </p>
-      {/* visar laddning, fel eller bekräftelsemeddelande */}
-      {loading && <p>Laddar dina recensioner...</p>}
-      {error && <p className="error">{error}</p>}
-      {message && <p className="success">{message}</p>}
-
-      {/* visar meddelande om inga recensioner finns */}
-      {!loading && !error && userReviews.length === 0 && (
-        <p style={{ fontStyle: "italic", textAlign: "center" }}>Du har inte skrivit några recensioner ännu.</p>
-      )}
-
-      {/* importerar användarens recensioner från komponent */}
+  
+        {/* visar laddning, fel eller bekräftelsemeddelande */}
+        {loading && <p>Laddar dina recensioner...</p>}
+        {error && <p className="error">{error}</p>}
+        {message && <p className="success">{message}</p>}
+  
+        {/* visar meddelande om inga recensioner finns */}
+        {!loading && !error && userReviews.length === 0 && (
+          <p style={{ fontStyle: "italic", textAlign: "center" }}>Du har inte skrivit några recensioner ännu.</p>
+        )}
+  
+        {/* importerar användarens recensioner från komponent */}
         {userReviews.map((review) => (
           <UserReviewItem
             key={review._id}
@@ -132,13 +134,14 @@ const MyProfilePage = () => {
           />
         ))}
       </section>
-      
+  
       <section>
-      <h2><i className="fa-solid fa-heart"></i> Mina gillade böcker</h2>
+        <h2><i className="fa-solid fa-heart"></i> Mina gillade böcker</h2>
         <p>
           Har du hittat en bok du gillar eller vill spara för att läsa senare? På varje boksida kan du klicka på hjärtikonen för att gilla boken. Alla dina gillade böcker samlas här nedan så att du enkelt kan hitta tillbaka till dem.
         </p>
-        <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+  
+        <div className="liked-books-grid">
           {loadingLikes ? (
             <p>Laddar gillade böcker...</p>
           ) : likedBooksDetails.length === 0 ? (
@@ -158,7 +161,7 @@ const MyProfilePage = () => {
         </div>
       </section>
     </div>
-  );
+  );  
 };
 
 export default MyProfilePage;
