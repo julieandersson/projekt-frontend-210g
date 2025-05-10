@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Review } from "../types/ReviewInterface";
+import "./css/UserReviewItem.css";
 
 // props
 interface UserReviewItemProps {
@@ -55,72 +56,77 @@ const UserReviewItem = ({ review, onUpdate, setMessage }: UserReviewItemProps) =
   };
 
   return (
-    <li style={{ marginBottom: "1.5rem" }}>
-      <strong>Bok: {review.bookTitle}</strong>
-      <br />
 
-      {/* Visar redigeringsformulär om redigeringsläge är aktivt */}
-      {editMode ? (
-        <>
-          <label>
-            Betyg:
-            <input
-              type="number"
-              min={1}
-              max={5}
-              value={editData.rating}
-              onChange={(e) =>
-                setEditData({ ...editData, rating: Number(e.target.value) })
-              }
-            />
-          </label>
-          <br />
-          <label>
-            Recension:
-            <textarea
-              value={editData.reviewText}
-              onChange={(e) =>
-                setEditData({ ...editData, reviewText: e.target.value })
-              }
-            />
-          </label>
-          <br />
-          <button onClick={saveEdit}>Spara</button>
-          <button onClick={() => setEditMode(false)}>Avbryt</button>
-        </>
-      ) : (
-        // visar recensionen som vanligt om inte i redigeringsläge
-        <>
-          Betyg: {review.rating}/5
-          <br />
-          "{review.reviewText}"
-          <br />
-          <small>
-            Skapad:{" "}
-            {new Date(review.created).toLocaleString("sv-SE", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </small>
-          <br />
-          <button onClick={() => setEditMode(true)}>Redigera</button> {/* sätter redigeringsläge true om användaren vill redigera */}
-          <button onClick={() => setDeleteConfirm(true)}>Radera</button> {/* sätter raderingsbek till true om användaren vill radera */}
-        </>
+    <section className="user-review-card">
+      <div className="user-review-content">
+        <strong>Bok: {review.bookTitle}</strong>
+        <br />
+  
+        {/* Visar redigeringsformulär om redigeringsläge är aktivt */}
+        {editMode ? (
+          <>
+            <label>
+              Betyg:
+              <input
+                type="number"
+                min={1}
+                max={5}
+                value={editData.rating}
+                onChange={(e) =>
+                  setEditData({ ...editData, rating: Number(e.target.value) })
+                }
+              />
+            </label>
+            <label>
+              Recension:
+              <textarea
+                value={editData.reviewText}
+                onChange={(e) =>
+                  setEditData({ ...editData, reviewText: e.target.value })
+                }
+              />
+            </label>
+            <button className="btn-save" onClick={saveEdit}><i className="fa-solid fa-check"></i> Spara</button>
+            <button className="btn-cancel" onClick={() => setEditMode(false)}><i className="fa-solid fa-xmark"></i> Avbryt</button>
+          </>
+        ) : (
+          // visar recensionen som vanligt om inte i redigeringsläge
+          <>
+            Betyg: {review.rating}/5
+            <br />
+            "{review.reviewText}"
+            <br />
+            <small>
+              Skapad:{" "}
+              {new Date(review.created).toLocaleString("sv-SE", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </small>
+          </>
+        )}
+  
+        {/* visar bekräftelse vid radering */}
+        {deleteConfirm && (
+          <>
+            <p style={{ fontStyle: "italic", color: "red" }}>Är du säker på att du vill ta bort denna recensionen?</p>
+            <button className="btn-yes" onClick={deleteReview}><i className="fa-solid fa-check"></i> Ja</button>
+            <button className="btn-no" onClick={() => setDeleteConfirm(false)}><i className="fa-solid fa-xmark"></i> Nej</button>
+          </>
+        )}
+      </div>
+  
+      {/* redigera/radera-knappar placerade till höger */}
+      {!editMode && !deleteConfirm && (
+        <div className="user-review-buttons">
+          <button onClick={() => setEditMode(true)}><i className="fa-solid fa-pencil"></i> Redigera</button> {/* sätter redigeringsläge true om användaren vill redigera */}
+          <button onClick={() => setDeleteConfirm(true)}><i className="fa-solid fa-trash-can"></i> Radera</button> {/* sätter raderingsbek till true om användaren vill radera */}
+        </div>
       )}
-
-      {/* visar bekräftelse vid radering */}
-      {deleteConfirm && (
-        <>
-          <p>Är du säker på att du vill ta bort denna recensionen?</p>
-          <button onClick={deleteReview}>Ja</button>
-          <button onClick={() => setDeleteConfirm(false)}>Nej</button>
-        </>
-      )}
-      <hr />
-    </li>
+    </section>
   );
 };
 

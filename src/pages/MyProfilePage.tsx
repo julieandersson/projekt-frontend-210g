@@ -101,14 +101,14 @@ const MyProfilePage = () => {
   return (
     <div>
       <section>
-      <p>Hej och välkommen {user?.username}!</p>
+      <p><i className="fa-solid fa-user"></i> Hej och välkommen {user?.username}!</p>
       </section>
 
       <h1>Min profil</h1>
       <br />
       
       <section>
-      <h2>Mina recensioner</h2>
+      <h2><i className="fa-solid fa-star"></i> Mina recensioner</h2>
         <p>
           Här samlas alla recensioner du har skrivit, lättöverskådligt på ett och samma ställe. Du kan när som helst redigera innehållet i en recension eller ta bort den helt om du ångrat dig. Håll koll på dina åsikter och uppdatera dem när det passar dig!
         </p>
@@ -123,7 +123,6 @@ const MyProfilePage = () => {
       )}
 
       {/* importerar användarens recensioner från komponent */}
-      <ul>
         {userReviews.map((review) => (
           <UserReviewItem
             key={review._id}
@@ -132,11 +131,10 @@ const MyProfilePage = () => {
             setMessage={setMessage}
           />
         ))}
-      </ul>
       </section>
       
       <section>
-      <h2>Mina gillade böcker</h2>
+      <h2><i className="fa-solid fa-heart"></i> Mina gillade böcker</h2>
         <p>
           Har du hittat en bok du gillar eller vill spara för att läsa senare? På varje boksida kan du klicka på hjärtikonen för att gilla boken. Alla dina gillade böcker samlas här nedan så att du enkelt kan hitta tillbaka till dem.
         </p>

@@ -1,0 +1,95 @@
+/* recensions-kort */
+.user-review-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+  
+/* innehåll */ 
+.user-review-content {
+    flex: 1;
+    line-height: 2.2rem;
+}
+
+/* redigera / radera-knappar */
+.user-review-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-left: 1rem;
+}
+  
+.user-review-buttons button {
+    padding: 0.5rem 0.75rem;
+    margin: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+  
+.user-review-buttons button:first-child {
+    background-color: #4caf50;
+    color: white;
+}
+  
+.user-review-buttons button:last-child {
+    background-color: #f44336;
+    color: white;
+}
+  
+.user-review-buttons button:hover {
+    opacity: 0.9;
+}
+ 
+/* spara, avbryt, ja, nej-knappar */
+.btn-save,
+.btn-cancel,
+.btn-yes,
+.btn-no {
+    padding: 0.5rem 0.75rem;
+    margin: 10px 10px 0 0;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+  
+.btn-save,
+.btn-yes {
+    background-color: #4caf50;
+    color: white;
+}
+  
+.btn-cancel,
+.btn-no {
+    background-color: #f44336;
+    color: white;
+}
+  
+.btn-save:hover,
+.btn-cancel:hover,
+.btn-yes:hover,
+.btn-no:hover {
+    opacity: 0.9;
+}
+ 
+/* betyg och recensionstext i redigeringsläge */
+.user-review-card textarea,
+.user-review-card input[type="number"] {
+    margin-top: 0.25rem;
+    width: 97%;
+    padding: 0.6rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+}
