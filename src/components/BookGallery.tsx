@@ -3,6 +3,7 @@ import { BookInterface } from "../types/BookInterface";
 import { Link, useNavigate } from "react-router-dom";
 import { BookGalleryProps } from "../types/BookGalleryProps";
 import "./css/BookGallery.css";
+import placeholder from "../assets/placeholder.png";
 
 const ITEMS_PER_PAGE = 20; // sätter antalet böcker som visas per sida
 
@@ -77,13 +78,12 @@ const BookGallery = ({ search, initialPage }: BookGalleryProps) => {
                 <div className="galleryGrid">
                     {bookList.map((book) => (
                         <div className="galleryItem" key={book.id}>
-                            {book.volumeInfo.imageLinks?.thumbnail && (
-                                <img
-                                    src={book.volumeInfo.imageLinks.thumbnail}
-                                    alt={book.volumeInfo.title}
-                                    className="galleryImage"
-                                />
-                            )}
+                            <img
+                            src={book.volumeInfo.imageLinks?.thumbnail || placeholder}
+                            alt={book.volumeInfo.title}
+                            className="galleryImage"
+                            />
+
                             <div className="galleryDetails">
                                 <h4>{book.volumeInfo.title}</h4>
                                 <p>

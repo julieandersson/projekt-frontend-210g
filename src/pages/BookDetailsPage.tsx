@@ -4,6 +4,7 @@ import { BookInterface } from "../types/BookInterface";
 import ReviewForm from "../components/ReviewForm";
 import { Review } from "../types/ReviewInterface";
 import { useAuth } from "../context/AuthContext";
+import placeholder from "../assets/placeholder.png";
 
 const BookDetailsPage = () => {
   const { id } = useParams(); // hämtar bok-ID från URL
@@ -129,18 +130,23 @@ const BookDetailsPage = () => {
   return (
     <section>
       <h2>{info.title}</h2>
-      {/* visar bokomslag om bild finns */}
-      {info.imageLinks?.thumbnail && (
-        <img src={info.imageLinks.thumbnail} alt={info.title} />
-      )}
+      {/* visar bokomslag om bild finns, annars visas placeholder */}
+      <img
+        src={info.imageLinks?.thumbnail || placeholder}
+        alt={info.title}
+        className="bookDetailsImage"
+      />
+
       {/* visar info om boken */}
       <p><strong>{likesCount} användare har gillat denna bok</strong></p>
 
       {/* knapp som visas för inloggade användare */}
-      {user && (
+      {user ? (
         <button onClick={hasLiked ? deleteLike : postLike}>
           {hasLiked ? "Ta bort gillning" : "Gilla denna bok"}
         </button>
+      ) : (
+        <p style={{ fontStyle: "italic", fontSize: "0.9rem"}}>Vill du också ge denna boken en like? Logga in på ditt konto.</p>
       )}
 
       <p><strong>Författare:</strong> {info.authors?.join(", ") || "Okänd"}</p>
