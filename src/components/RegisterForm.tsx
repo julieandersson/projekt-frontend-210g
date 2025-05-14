@@ -137,7 +137,7 @@ const RegisterForm = () => {
           {errors.password && <p className="error-message">{errors.password}</p>}
 
           {/* Skapa konto */}
-          <button type="submit">Skapa konto</button>
+          <button type="submit" className="createButton">Skapa konto</button>
         </form>
 
         {/* länk till logga in */}

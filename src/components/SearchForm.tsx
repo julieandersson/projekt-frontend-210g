@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SearchFormProps } from "../types/SearchFormProps";
-
+import "./css/SearchForm.css";
   
 // formulärkomponent för att söka efter böcker  
 const SearchForm = ({ onSearch, initialValue = "" }: SearchFormProps) => {
@@ -18,16 +18,19 @@ const SearchForm = ({ onSearch, initialValue = "" }: SearchFormProps) => {
   
     return (
       <form onSubmit={handleSubmit} className="searchForm">
-        <label htmlFor="search">Sök efter böcker:</label>
-        <input
-          type="text"
-          id="search"
-          name="search"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ex. Harry Potter..."
-        />
-        <button type="submit" className="searchButton">Sök</button>
+        <label htmlFor="search" className="searchLabel">Sök efter böcker:</label>
+        <div className="searchInputGroup">
+          <input
+            type="text"
+            className="searchInput"
+            id="search"
+            name="search"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Ex. Harry Potter..."
+          />
+          <button type="submit" className="searchButton">Sök</button>
+        </div>
       </form>
     );
   };

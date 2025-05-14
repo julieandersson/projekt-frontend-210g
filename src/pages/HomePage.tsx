@@ -2,6 +2,7 @@ import BookGallery from "../components/BookGallery";
 import SearchForm from "../components/SearchForm";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import "./css/HomePage.css";
 
 // definierar genrer som ska användas i dropdown-menyn
 const genres = [
@@ -78,14 +79,14 @@ const HomePage = () => {
       <SearchForm initialValue={queryParam} onSearch={handleSearch} />
 
       {/* Genre-dropdown */}
-      <label htmlFor="genre" style={{ display: "block", marginTop: "1rem" }}>
+      <label htmlFor="genre" className="searchLabel">
         Filtrera på genre:
       </label>
       <select
         id="genre"
         value={selectedGenre}
         onChange={(e) => handleGenreChange(e.target.value)}
-        style={{ marginBottom: "1rem" }}
+        className="searchSelect"
       >
         {genres.map((g) => (
           <option key={g.value} value={g.value}>

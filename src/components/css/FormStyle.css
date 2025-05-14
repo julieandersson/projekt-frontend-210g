@@ -24,7 +24,8 @@ label {
   background-color: #ffffff;
 }
   
-button[type="submit"] {
+.loginButton,
+.createButton {
   width: 100%;
   font-size: 1rem;
   margin-top: 1.5rem;
@@ -38,11 +39,13 @@ button[type="submit"] {
   transition: background-color 0.2s ease;
 }
   
-button[type="submit"]:hover:not(:disabled) {
+.loginButton:hover:not(:disabled),
+.createButton:hover:not(:disabled) {
   background-color: #304862;
 }
   
-button[type="submit"]:disabled {
+.loginButton:disabled,
+.createButton:disabled {
   background-color: #6c757d;
   cursor: not-allowed;
 }
