@@ -146,7 +146,12 @@ const BookDetailsPage = () => {
           {hasLiked ? "Ta bort gillning" : "Gilla denna bok"}
         </button>
       ) : (
-        <p style={{ fontStyle: "italic", fontSize: "0.9rem"}}>Vill du också ge denna boken en like? Logga in på ditt konto.</p>
+        <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>
+          Vill du också ge denna boken en like?{" "}
+          <Link to="/login" style={{ textDecoration: "none", color: "#0070f3" }}>
+            Logga in på ditt konto
+          </Link>.
+        </p>
       )}
 
       <p><strong>Författare:</strong> {info.authors?.join(", ") || "Okänd"}</p>
@@ -192,12 +197,19 @@ const BookDetailsPage = () => {
           </ul>
         )}
 
-        {user && (
+        {user ? (
           <ReviewForm
             bookId={id || ""}
             bookTitle={info.title}
             onReviewSubmit={getReviews}
           />
+        ) : (
+          <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>
+            <Link to="/logga-in" style={{ color: "#007bff", textDecoration: "none" }}>
+              Logga in
+            </Link>{" "}
+            på ditt konto för att skriva en recension.
+          </p>
         )}
     </section>
   );
