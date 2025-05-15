@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext"; // authcontext för autentiser
 import * as Yup from "yup"; // importerar yup valideringsbiblitoek
 import { ReviewFormData } from "../types/ReviewFormData"; // importerar interface för formdata
 import { ReviewErrors } from "../types/ReviewErrors"; // importerar valideringsfel
+import "./css/ReviewForm.css";
 
 // props
 interface ReviewFormProps {
@@ -95,7 +96,7 @@ const ReviewForm = ({ bookId, bookTitle, onReviewSubmit }: ReviewFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="review-form">
       <h4>Skriv en recension</h4>
 
       {/* allmänt felmeddelande (t.ex. ej inloggad) */}

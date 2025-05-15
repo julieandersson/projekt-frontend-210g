@@ -124,7 +124,7 @@ const BookDetailsPage = () => {
     }, [id, user]);    
 
     // visar laddningsmeddelande eller felmeddelande
-    if (loading) return <p>Laddar bokinformation...</p>;
+    if (loading) return <p style={{ fontStyle: "italic", textAlign: "center" }}>Laddar bokinformation...</p>;
     if (error || !book) return <p>{error || "Ingen bokinformation hittades."}</p>;
 
     // extraherar volumeInfo från bokobjektet
@@ -204,9 +204,9 @@ const BookDetailsPage = () => {
       {message && <p className="confirmation-message">{message}</p>}
 
       {reviewsLoading ? (
-        <p>Laddar recensioner...</p>
+        <p style={{ fontStyle: "italic", textAlign: "center" }}>Laddar recensioner...</p>
       ) : reviews.length === 0 ? (
-        <p>Inga recensioner ännu.</p>
+        <p style={{ fontStyle: "italic" }}>Inga recensioner ännu.</p>
       ) : (
         <div className="bookdetails-review-list">
           {reviews.map((r) =>

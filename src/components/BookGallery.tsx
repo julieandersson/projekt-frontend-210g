@@ -70,7 +70,7 @@ const BookGallery = ({ search, initialPage }: BookGalleryProps) => {
 
     return (
         <section className="galleryContainer">
-            {loading && <div className="loading">Laddar böcker...</div>}
+            {loading && <div style={{ fontStyle: "italic", textAlign: "center" }}>Laddar böcker...</div>}
 
             {!loading && error && <p className="errorMsg">{error}</p>}
 

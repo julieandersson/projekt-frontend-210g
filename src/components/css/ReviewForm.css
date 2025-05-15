@@ -1,0 +1,73 @@
+/* recensionsformulär på bokdetaljsidan */
+
+.review-form {
+    max-width: 500px;
+    margin-top: 2rem;
+    padding: 1rem 2rem 2rem;
+    background-color: #e6f1f6;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    font-size: 0.95rem;
+}
+  
+h4 {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+}
+  
+.form-group {
+    margin-bottom: 1rem;
+}
+  
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    font-size: 1rem;
+}
+  
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    resize: vertical;
+    box-sizing: border-box;
+}
+  
+input[type="number"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: #0070f3;
+    box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);
+}
+  
+.error {
+    color: #d93025;
+    font-size: 1rem;
+    margin-top: 0.2rem;
+}
+  
+.success {
+    color: #188038;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+  
+.reviewButton {
+    padding: 0.7rem 1.3rem;
+    background-color: #0070f3;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+  
+.reviewButton:hover {
+    background-color: #005fd1;
+}
+  

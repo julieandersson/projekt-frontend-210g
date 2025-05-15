@@ -115,13 +115,13 @@ const MyProfilePage = () => {
         </p>
   
         {/* visar laddning, fel eller bekräftelsemeddelande */}
-        {loading && <p>Laddar dina recensioner...</p>}
+        {loading && <p style={{ fontStyle: "italic" }}>Laddar dina recensioner...</p>}
         {error && <p className="error">{error}</p>}
         {message && <p className="success">{message}</p>}
   
         {/* visar meddelande om inga recensioner finns */}
         {!loading && !error && userReviews.length === 0 && (
-          <p style={{ fontStyle: "italic", textAlign: "center" }}>Du har inte skrivit några recensioner ännu.</p>
+          <p style={{ fontStyle: "italic" }}>Du har inte skrivit några recensioner ännu.</p>
         )}
   
         {/* importerar användarens recensioner från komponent */}
@@ -143,9 +143,9 @@ const MyProfilePage = () => {
   
         <div className="liked-books-grid">
           {loadingLikes ? (
-            <p>Laddar gillade böcker...</p>
+            <p style={{ fontStyle: "italic", textAlign: "center" }}>Laddar gillade böcker...</p>
           ) : likedBooksDetails.length === 0 ? (
-            <p style={{ fontStyle: "italic", textAlign: "center" }}>Du har inte gillat några böcker ännu.</p>
+            <p style={{ fontStyle: "italic" }}>Du har inte gillat några böcker ännu.</p>
           ) : (
             // renderar gillade böcker med bild, titel och "ta bort gillning"-knapp
             likedBooksDetails.map((book) => (
