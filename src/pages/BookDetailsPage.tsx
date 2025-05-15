@@ -4,7 +4,9 @@ import { BookInterface } from "../types/BookInterface";
 import ReviewForm from "../components/ReviewForm";
 import { Review } from "../types/ReviewInterface";
 import { useAuth } from "../context/AuthContext";
+import UserReviewItem from "../components/UserReviewItem";
 import placeholder from "../assets/placeholder.png";
+import "./css/BookDetailsPage.css";
 
 const BookDetailsPage = () => {
   const { id } = useParams(); // hämtar bok-ID från URL
@@ -14,26 +16,27 @@ const BookDetailsPage = () => {
   const [book, setBook] = useState<BookInterface | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
 
-  // states för laddning, fel och gillningar
+  // states för laddning, fel, gillningar och meddelande
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [reviewsLoading, setReviewsLoading] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
+  const [message, setMessage] = useState(""); // bekräftelsemeddelande
 
   // hämtar bokinformation från Google Books API
   const getBook = async () => {
     setLoading(true);
-      try {
-        const res = await fetch(`https://www.googleapis.com/books/v1/volumes/${id}`);
-        if (!res.ok) throw new Error("Något gick fel vid hämtning");
-        const data = await res.json();
-        setBook(data);
-      } catch (err) {
-        setError("Kunde inte hämta bokinformationen.");
-      } finally {
-        setLoading(false);
-      }
+    try {
+      const res = await fetch(`https://www.googleapis.com/books/v1/volumes/${id}`);
+      if (!res.ok) throw new Error("Något gick fel vid hämtning");
+      const data = await res.json();
+      setBook(data);
+    } catch (err) {
+      setError("Kunde inte hämta bokinformationen.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // hämtar antal gillningar för aktuell bok
@@ -131,42 +134,62 @@ const BookDetailsPage = () => {
     <section>
       <h2>{info.title}</h2>
       {/* visar bokomslag om bild finns, annars visas placeholder */}
-      <img
-        src={info.imageLinks?.thumbnail || placeholder}
-        alt={info.title}
-        className="bookDetailsImage"
-      />
+      <br />
+      <div className="bookdetails-top">
+        <div className="bookdetails-left">
+          <img
+            src={info.imageLinks?.thumbnail || placeholder}
+            alt={info.title}
+            className="bookDetailsImage"
+          />
 
-      {/* visar info om boken */}
-      <p><strong>{likesCount} användare har gillat denna bok</strong></p>
+          {/* visar info om boken */}
+          <div className="likeSection">
+            <p><strong>{likesCount} användare har gillat denna bok</strong></p>
 
-      {/* knapp som visas för inloggade användare */}
-      {user ? (
-        <button onClick={hasLiked ? deleteLike : postLike}>
-          {hasLiked ? "Ta bort gillning" : "Gilla denna bok"}
-        </button>
-      ) : (
-        <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>
-          Vill du också ge denna boken en like?{" "}
-          <Link to="/login" style={{ textDecoration: "none", color: "#0070f3" }}>
-            Logga in på ditt konto
-          </Link>.
-        </p>
-      )}
+            {/* knapp som visas för inloggade användare */}
+            {user ? (
+              <button onClick={hasLiked ? deleteLike : postLike} className="bookdetails-like-button">
+                {hasLiked ? (
+                  <>
+                    <i className="fa-solid fa-heart-crack" style={{ marginRight: "0.5rem" }}></i>
+                    Ta bort gillning
+                  </>
+                ) : (
+                  <>
+                    <i className="fa-solid fa-heart-circle-plus" style={{ marginRight: "0.5rem" }}></i>
+                    Gilla denna bok
+                  </>
+                )}
+              </button>
+            ) : (
+              <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>
+                Vill du också ge denna boken en like?{" "}
+                <Link to="/login" style={{ textDecoration: "none", color: "#0070f3" }}>
+                  Logga in på ditt konto
+                </Link>.
+              </p>
+            )}
+          </div>
+        </div>
 
-      <p><strong>Författare:</strong> {info.authors?.join(", ") || "Okänd"}</p>
-      <p><strong>Utgivningsår:</strong> {info.publishedDate?.slice(0, 4) || "Saknas"}</p>
-      <p><strong>Förlag:</strong> {info.publisher || "Saknas"}</p>
-      <p><strong>Antal sidor:</strong> {info.pageCount || "Okänt"}</p>
-      <p><strong>Språk:</strong> {info.language?.toUpperCase() || "Saknas"}</p>
-      <p><strong>Genrer:</strong> {info.categories?.join(", ") || "Saknas"}</p>
+        <div className="bookdetails-right">
+          <p className="bookdetails-info"><strong>Författare:</strong> {info.authors?.join(", ") || "Okänd"}</p>
+          <p className="bookdetails-info"><strong>Utgivningsår:</strong> {info.publishedDate?.slice(0, 4) || "Saknas"}</p>
+          <p className="bookdetails-info"><strong>Förlag:</strong> {info.publisher || "Saknas"}</p>
+          <p className="bookdetails-info"><strong>Antal sidor:</strong> {info.pageCount || "Okänt"}</p>
+          <p className="bookdetails-info"><strong>Språk:</strong> {info.language?.toUpperCase() || "Saknas"}</p>
+          <p className="bookdetails-info"><strong>Genrer:</strong> {info.categories?.join(", ") || "Saknas"}</p>
+        </div>
+      </div>
 
       {/* renderar beskrivningen som HTML med dangerouslySetInnerHTML */}
-      <div>
-        <strong>Beskrivning:</strong>
+      <div className="bookdetails-description-container">
+        <strong className="bookdetails-description-label">Beskrivning:</strong>
         <div
+          className="bookdetails-description"
           dangerouslySetInnerHTML={{
-            __html: info.description || "Ingen beskrivning tillgänglig."
+            __html: info.description || "Ingen beskrivning tillgänglig.",
           }}
         />
       </div>
@@ -177,40 +200,50 @@ const BookDetailsPage = () => {
       <hr />
 
       <h3>Recensioner</h3>
-        {reviewsLoading ? (
-          <p>Laddar recensioner...</p>
-        ) : reviews.length === 0 ? (
-          <p>Inga recensioner ännu.</p>
-        ) : (
-          /* tillfällig utskrift av recensioner just nu */
-          <ul>
-            {reviews.map((r) => (
-              <li key={r._id}>
-                <strong>{r.username}</strong>
-                <br />
-                {r.rating}/5
-                <br />
-                {r.reviewText}
-                <hr />
-              </li>
-            ))}
-          </ul>
-        )}
 
-        {user ? (
-          <ReviewForm
-            bookId={id || ""}
-            bookTitle={info.title}
-            onReviewSubmit={getReviews}
-          />
-        ) : (
-          <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>
-            <Link to="/logga-in" style={{ color: "#007bff", textDecoration: "none" }}>
-              Logga in
-            </Link>{" "}
-            på ditt konto för att skriva en recension.
-          </p>
-        )}
+      {message && <p className="confirmation-message">{message}</p>}
+
+      {reviewsLoading ? (
+        <p>Laddar recensioner...</p>
+      ) : reviews.length === 0 ? (
+        <p>Inga recensioner ännu.</p>
+      ) : (
+        <div className="bookdetails-review-list">
+          {reviews.map((r) =>
+            user?.username === r.username ? (
+              <UserReviewItem
+                key={r._id}
+                review={r}
+                onUpdate={getReviews}
+                setMessage={setMessage}
+              />
+            ) : (
+              <li key={r._id} className="bookdetails-review-item">
+                <strong>{r.username}</strong>
+                <div className="bookdetails-review-rating">
+                  {r.rating}/5 <i className="fa-solid fa-star"></i>
+                </div>
+                <div className="bookdetails-review-text">"{r.reviewText}"</div>
+              </li>
+            )
+          )}
+        </div>
+      )}
+
+      {user ? (
+        <ReviewForm
+          bookId={id || ""}
+          bookTitle={info.title}
+          onReviewSubmit={getReviews}
+        />
+      ) : (
+        <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>
+          <Link to="/logga-in" style={{ color: "#007bff", textDecoration: "none" }}>
+            Logga in
+          </Link>{" "}
+          på ditt konto för att skriva en recension.
+        </p>
+      )}
     </section>
   );
 };
