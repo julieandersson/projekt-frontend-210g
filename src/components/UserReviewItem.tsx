@@ -20,7 +20,7 @@ const UserReviewItem = ({ review, onUpdate, setMessage }: UserReviewItemProps) =
   // funktion för att uppdatera recension
   const saveEdit = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/reviews/${review._id}`, {
+      const res = await fetch(`https://projekt-api-210g.onrender.com/reviews/${review._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -40,7 +40,7 @@ const UserReviewItem = ({ review, onUpdate, setMessage }: UserReviewItemProps) =
   // funktion för att radera recension
   const deleteReview = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/reviews/${review._id}`, {
+      const res = await fetch(`https://projekt-api-210g.onrender.com/reviews/${review._id}`, {
         method: "DELETE",
         credentials: "include",
       });

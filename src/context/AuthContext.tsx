@@ -15,7 +15,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // registrering av ny användare
     const register = async (credentials: RegisterCredentials): Promise<void> => {
         try {
-            const res = await fetch("http://localhost:3000/users", {
+            const res = await fetch("https://projekt-api-210g.onrender.com/users", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -38,7 +38,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // inloggning av användare
     const login = async (credentials: LoginCredentials): Promise<void> => {
         try {
-            const res = await fetch("http://localhost:3000/users/login", {
+            const res = await fetch("https://projekt-api-210g.onrender.com/users/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -68,7 +68,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // validering av token vid sidanladdning, kontrollerar om användaren är inloggad
     const checkUser = async () => {
         try {
-            const res = await fetch('http://localhost:3000/checkUser', {
+            const res = await fetch("https://projekt-api-210g.onrender.com/checkUser", {
                 method: "GET",
                 credentials: "include",
                 headers: {
@@ -96,7 +96,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // utloggning av användare
     const logout = async () => {
         try {
-            const res = await fetch("http://localhost:3000/users/logout", {
+            const res = await fetch("https://projekt-api-210g.onrender.com/users/logout", {
                 method: "GET",
                 credentials: "include",
                 headers: {

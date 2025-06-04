@@ -42,7 +42,7 @@ const BookDetailsPage = () => {
   // hämtar antal gillningar för aktuell bok
   const getLikesCount = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/bookLikes/${id}`);
+      const res = await fetch(`https://projekt-api-210g.onrender.com/bookLikes/${id}`);
       if (!res.ok) throw new Error("Kunde inte hämta gillningar");
       const data = await res.json();
       setLikesCount(data.likes);
@@ -54,7 +54,7 @@ const BookDetailsPage = () => {
   // kollar om inloggad användare har gillat den aktuella boken
   const getUserHasLiked = async () => {
     try {
-      const res = await fetch("http://localhost:3000/bookLikes/user-likes", {
+      const res = await fetch("https://projekt-api-210g.onrender.com/bookLikes/user-likes", {
         credentials: "include",
       });
       const data = await res.json();
@@ -68,7 +68,7 @@ const BookDetailsPage = () => {
   // funktion för att gilla boken
   const postLike = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/bookLikes/${id}`, {
+      const res = await fetch(`https://projekt-api-210g.onrender.com/bookLikes/${id}`, {
         method: "POST",
         credentials: "include",
       });
@@ -83,7 +83,7 @@ const BookDetailsPage = () => {
   // funktion för att ta bort gillning 
   const deleteLike = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/bookLikes/${id}`, {
+      const res = await fetch(`https://projekt-api-210g.onrender.com/bookLikes/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -99,7 +99,7 @@ const BookDetailsPage = () => {
   const getReviews = async () => {
     setReviewsLoading(true);
       try {
-        const res = await fetch("http://localhost:3000/reviews", {
+        const res = await fetch("https://projekt-api-210g.onrender.com/reviews", {
           credentials: "include"
         });
         

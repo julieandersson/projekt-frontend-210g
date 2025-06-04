@@ -25,7 +25,7 @@ const MyProfilePage = () => {
   const getUserReviews = async () => {
     setLoading(true); // visar laddningsmeddelande
     try {
-      const res = await fetch("http://localhost:3000/reviews/user", {
+      const res = await fetch("https://projekt-api-210g.onrender.com/reviews/user", {
         credentials: "include", // skickar med cookie (jwt)
       });
       if (!res.ok) throw new Error("Kunde inte hämta dina recensioner");
@@ -42,7 +42,7 @@ const MyProfilePage = () => {
   const getUserLikes = async () => {
     setLoadingLikes(true);
     try {
-      const res = await fetch("http://localhost:3000/bookLikes/user-likes", {
+      const res = await fetch("https://projekt-api-210g.onrender.com/bookLikes/user-likes", {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Kunde inte hämta gillningar");
@@ -58,7 +58,7 @@ const MyProfilePage = () => {
   // tar bort en gillning för specifik bok
   const deleteBookLike = async (bookId: string) => {
     try {
-      const res = await fetch(`http://localhost:3000/bookLikes/${bookId}`, {
+      const res = await fetch(`https://projekt-api-210g.onrender.com/bookLikes/${bookId}`, {
         method: "DELETE",
         credentials: "include"
       });

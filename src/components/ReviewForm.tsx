@@ -55,7 +55,7 @@ const ReviewForm = ({ bookId, bookTitle, onReviewSubmit }: ReviewFormProps) => {
       await validationSchema.validate(reviewFormData, { abortEarly: false });
 
       // Skapa recension, POST anrop till API
-      const res = await fetch("http://localhost:3000/reviews", {
+      const res = await fetch("https://projekt-api-210g.onrender.com/reviews", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
