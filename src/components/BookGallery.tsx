@@ -40,7 +40,7 @@ const BookGallery = ({ search, initialPage }: BookGalleryProps) => {
             setLoading(true);
             setError("");
             
-            // skapar korrekt söksträng 
+            // sökterm som trimmas för att ta bort extra mellanslag 
             const actualQuery = search.trim();
 
             const offset = (currentPage - 1) * ITEMS_PER_PAGE;
