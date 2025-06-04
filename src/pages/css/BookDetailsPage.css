@@ -106,7 +106,13 @@
 
 .bookdetails-review-text {
     line-height: 1.8rem;
-}  
+}
+
+.confirmation-message {
+    color: #188038;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
   
 /* mobilrespons */
 @media (max-width: 900px) {

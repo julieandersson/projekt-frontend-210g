@@ -42,9 +42,11 @@ const UserReviewItem = ({ review, onUpdate, setMessage }: UserReviewItemProps) =
 
       if (!res.ok) throw new Error("Kunde inte uppdatera recensionen.");
 
-      setEditMode(false); // avslutar redigering
+      setEditMode(false);
       setMessage("Recensionen har uppdaterats!");
-      onUpdate(); // uppdaterar listan
+      setTimeout(() => setMessage(""), 3000);
+      onUpdate();
+
     } catch (err) {
       console.error(err);
       setValidationError("Ett fel uppstod vid uppdatering.");
@@ -61,9 +63,11 @@ const UserReviewItem = ({ review, onUpdate, setMessage }: UserReviewItemProps) =
 
       if (!res.ok) throw new Error("Kunde inte radera recensionen.");
 
-      setDeleteConfirm(false); // stänger bek
+      setDeleteConfirm(false);
       setMessage("Recensionen har raderats.");
-      onUpdate(); // uppdaterar listan
+      setTimeout(() => setMessage(""), 3000);
+      onUpdate();
+
     } catch (err) {
       console.error(err);
     }

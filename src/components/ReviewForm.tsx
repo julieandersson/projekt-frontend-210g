@@ -75,6 +75,7 @@ const ReviewForm = ({ bookId, bookTitle, onReviewSubmit }: ReviewFormProps) => {
 
       setReviewFormData({ reviewText: "", rating: 5 });
       setSuccess("Recensionen har sparats!");
+      setTimeout(() => setSuccess(""), 3000); // meddelandet försvinner efter 3 sekunder
       onReviewSubmit(); // laddar om recensioner
 
     } catch (err: any) {
