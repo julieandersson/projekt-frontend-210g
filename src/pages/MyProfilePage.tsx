@@ -12,7 +12,8 @@ const MyProfilePage = () => {
   const [userReviews, setUserReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
+  const [reviewMessage, setReviewMessage] = useState("");
+  const [likeMessage, setLikeMessage] = useState("");
 
   // laddning och bokdata för varje bok som användaren har gillat
   const [loadingLikes, setLoadingLikes] = useState(false);
@@ -67,7 +68,7 @@ const MyProfilePage = () => {
       setLikedBooksDetails((prev) =>
         prev.filter((book) => book.id !== bookId)
       );
-      setMessage("Gillning borttagen.");
+      setLikeMessage("Gillning borttagen.");
     } catch (err) {
       console.error(err);
       setError("Fel vid borttagning.");
@@ -117,7 +118,7 @@ const MyProfilePage = () => {
         {/* visar laddning, fel eller bekräftelsemeddelande */}
         {loading && <p style={{ fontStyle: "italic" }}>Laddar dina recensioner...</p>}
         {error && <p className="error">{error}</p>}
-        {message && <p className="success">{message}</p>}
+        {reviewMessage && <p className="success">{reviewMessage}</p>}
   
         {/* visar meddelande om inga recensioner finns */}
         {!loading && !error && userReviews.length === 0 && (
@@ -130,7 +131,7 @@ const MyProfilePage = () => {
             key={review._id}
             review={review}
             onUpdate={getUserReviews}
-            setMessage={setMessage}
+            setMessage={setReviewMessage}
           />
         ))}
       </section>
@@ -140,6 +141,7 @@ const MyProfilePage = () => {
         <p>
           Har du hittat en bok du gillar eller vill spara för att läsa senare? På varje boksida kan du klicka på hjärtikonen för att gilla boken. Alla dina gillade böcker samlas här nedan så att du enkelt kan hitta tillbaka till dem.
         </p>
+        {likeMessage && <p className="success">{likeMessage}</p>}
   
         <div className="liked-books-grid">
           {loadingLikes ? (
