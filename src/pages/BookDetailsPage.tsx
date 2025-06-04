@@ -20,6 +20,7 @@ const BookDetailsPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [likesLoading, setLikesLoading] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
   const [message, setMessage] = useState(""); // bekräftelsemeddelande
@@ -41,6 +42,7 @@ const BookDetailsPage = () => {
 
   // hämtar antal gillningar för aktuell bok
   const getLikesCount = async () => {
+    setLikesLoading(true);
     try {
       const res = await fetch(`https://projekt-api-210g.onrender.com/bookLikes/${id}`);
       if (!res.ok) throw new Error("Kunde inte hämta gillningar");
@@ -48,6 +50,8 @@ const BookDetailsPage = () => {
       setLikesCount(data.likes);
     } catch (err) {
       console.error("Fel vid hämtning av gillningar:", err);
+    } finally {
+      setLikesLoading(false);
     }
   };
 
@@ -145,7 +149,11 @@ const BookDetailsPage = () => {
 
           {/* visar info om boken */}
           <div className="likeSection">
+            {likesLoading ? (
+            <p style={{ fontStyle: "italic", textAlign: "center" }}>Laddar antal gillningar...</p>
+          ) : (
             <p><strong>{likesCount} användare har gillat denna bok</strong></p>
+          )}
 
             {/* knapp som visas för inloggade användare */}
             {user ? (
