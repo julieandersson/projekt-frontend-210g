@@ -41,9 +41,7 @@ const BookGallery = ({ search, initialPage }: BookGalleryProps) => {
             setError("");
             
             // skapar korrekt söksträng 
-            const actualQuery = search.trim().includes("subject:")
-                ? search.trim()
-                : `intitle:${search.trim()}`;
+            const actualQuery = search.trim();
 
             const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
