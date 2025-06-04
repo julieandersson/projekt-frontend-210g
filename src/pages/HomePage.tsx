@@ -40,12 +40,12 @@ const HomePage = () => {
 
   // uppdaterar urlparametrar när sökterm, genre eller sida ändras
   useEffect(() => {
-    const params: any = {};
-    if (searchTerm) params.query = searchTerm;
-    if (selectedGenre) params.genre = selectedGenre;
-    params.page = page.toString();
-    setSearchParams(params);
-  }, [searchTerm, selectedGenre, page]);
+  const params = new URLSearchParams();
+  if (searchTerm) params.set("query", searchTerm);
+  if (selectedGenre) params.set("genre", selectedGenre);
+  params.set("page", page.toString());
+  setSearchParams(params);
+}, [searchTerm, selectedGenre, page]);
 
   // hanterar sökning från sökfältet
   const handleSearch = (term: string) => {

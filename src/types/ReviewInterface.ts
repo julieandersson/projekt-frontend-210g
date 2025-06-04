@@ -9,5 +9,6 @@ export interface Review {
     reviewText: string;
     rating: number;
     created: string;
+    updated?: string;
 }
   

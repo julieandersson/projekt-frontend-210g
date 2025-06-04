@@ -16,9 +16,22 @@ const UserReviewItem = ({ review, onUpdate, setMessage }: UserReviewItemProps) =
     reviewText: review.reviewText, // initierar den befintliga recensionsdatan
     rating: review.rating,
   });
+  const [validationError, setValidationError] = useState("");
 
   // funktion för att uppdatera recension
   const saveEdit = async () => {
+    setValidationError(""); // nollställ
+
+    // manuell validering
+    if (editData.rating < 1 || editData.rating > 5) {
+      setValidationError("Betyget måste vara mellan 1 och 5.");
+      return;
+    }
+    if (editData.reviewText.trim().length < 10) {
+      setValidationError("Recensionen måste vara minst 10 tecken lång.");
+      return;
+    }
+
     try {
       const res = await fetch(`https://projekt-api-210g.onrender.com/reviews/${review._id}`, {
         method: "PUT",
@@ -34,6 +47,7 @@ const UserReviewItem = ({ review, onUpdate, setMessage }: UserReviewItemProps) =
       onUpdate(); // uppdaterar listan
     } catch (err) {
       console.error(err);
+      setValidationError("Ett fel uppstod vid uppdatering.");
     }
   };
 
@@ -105,9 +119,23 @@ const UserReviewItem = ({ review, onUpdate, setMessage }: UserReviewItemProps) =
                 hour: "2-digit",
                 minute: "2-digit",
               })}
+              <br />
+              {review.updated && (
+                <>
+                  Senast uppdaterad:{" "}
+                  {new Date(review.updated).toLocaleString("sv-SE", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </>
+              )}
             </small>
           </>
         )}
+        {validationError && <p className="error">{validationError}</p>}
   
         {/* visar bekräftelse vid radering */}
         {deleteConfirm && (

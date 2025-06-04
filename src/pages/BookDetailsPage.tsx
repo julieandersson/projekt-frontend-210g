@@ -100,32 +100,39 @@ const BookDetailsPage = () => {
   };
 
   // hämtar recensioner för aktuell bok
-  const getReviews = async () => {
+  const getReviews = async (bookId: string) => {
     setReviewsLoading(true);
-      try {
-        const res = await fetch("https://projekt-api-210g.onrender.com/reviews", {
-          credentials: "include"
-        });
-        
-        if (!res.ok) throw new Error("Kunde inte hämta recensioner");
-        const data: Review[] = await res.json();
-        const filtered = data.filter((r) => r.bookId === id);
-        setReviews(filtered);
+    try {
+      const res = await fetch(`https://projekt-api-210g.onrender.com/reviews?bookId=${bookId}`, {
+      });
 
-      } catch (err) {
-        console.error("Fel vid hämtning av recensioner:", err);
-      } finally {
-        setReviewsLoading(false);
+      if (!res.ok) throw new Error("Kunde inte hämta recensioner");
+
+      const data = await res.json();
+
+      if (Array.isArray(data)) {
+        setReviews(data);
+      } else {
+        setReviews([]);
       }
-    };
+    } catch (err) {
+      console.error("Fel vid hämtning av recensioner:", err);
+      setReviews([]);
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
 
     // körs när sidan mountas
     useEffect(() => {
+    if (id) {
       getBook();
-      getReviews();
+      getReviews(id);
       getLikesCount();
       if (user) getUserHasLiked(); // kollar om boken är gillad av användaren som är inloggad
-    }, [id, user]);    
+    }
+  }, [id, user]);
+    
 
     // visar laddningsmeddelande eller felmeddelande
     if (loading) return <p style={{ fontStyle: "italic", textAlign: "center" }}>Laddar bokinformation...</p>;
@@ -173,7 +180,7 @@ const BookDetailsPage = () => {
             ) : (
               <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>
                 Vill du också ge denna boken en like?{" "}
-                <Link to="/login" style={{ textDecoration: "none", color: "#0070f3" }}>
+                <Link to="/logga-in" style={{ textDecoration: "none", color: "#0070f3" }}>
                   Logga in på ditt konto
                 </Link>.
               </p>
@@ -222,7 +229,7 @@ const BookDetailsPage = () => {
               <UserReviewItem
                 key={r._id}
                 review={r}
-                onUpdate={getReviews}
+                onUpdate={() => id && getReviews(id)}
                 setMessage={setMessage}
               />
             ) : (
@@ -232,6 +239,33 @@ const BookDetailsPage = () => {
                   {r.rating}/5 <i className="fa-solid fa-star"></i>
                 </div>
                 <div className="bookdetails-review-text">"{r.reviewText}"</div>
+                <div className="bookdetails-review-dates">
+                  <small>
+                    Skapad:{" "}
+                    {new Date(r.created).toLocaleString("sv-SE", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </small>
+                  {r.updated && r.updated !== r.created && (
+                    <br />
+                  )}
+                  {r.updated && r.updated !== r.created && (
+                    <small>
+                      Senast uppdaterad:{" "}
+                      {new Date(r.updated).toLocaleString("sv-SE", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </small>
+                  )}
+                </div>
               </li>
             )
           )}
@@ -242,7 +276,7 @@ const BookDetailsPage = () => {
         <ReviewForm
           bookId={id || ""}
           bookTitle={info.title}
-          onReviewSubmit={getReviews}
+          onReviewSubmit={() => id && getReviews(id)}
         />
       ) : (
         <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>

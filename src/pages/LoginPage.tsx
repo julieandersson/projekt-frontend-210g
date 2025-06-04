@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext'; // importera AuthContext för hantering av autentisering
 import { useNavigate } from 'react-router-dom'; // för att navigera efter inloggning
 import { Link } from "react-router-dom";
+import * as Yup from 'yup'; // importerar Yup för validering av formulär
 import "./css/LoginPage.css";
 import "../components/css/FormStyle.css";
 
@@ -10,6 +11,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [validationErrors, setValidationErrors] = useState<{ email?: string; password?: string }>({});
   const [loading, setLoading] = useState(false);
 
   const {login, user} = useAuth(); // hämtar inloggningsfunktionen från AuthContext
@@ -22,23 +24,42 @@ const LoginPage = () => {
     }
   }, [user, navigate]);
 
+  // Yup valideringsschema
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .email('Du måste ange en giltig e-postadress')
+      .required('Du måste ange en e-postadress'),
+    password: Yup.string()
+      .required('Du måste ange ett lösenord'),
+  });
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // förhindrar att sidan laddas om vid formulärinlämning
     setError(''); // återställer ev felmeddelanden
+    setValidationErrors({});
     setLoading(true);
 
     try {
+      await validationSchema.validate({ email, password }, { abortEarly: false });
 
       await login({ email, password }); // loggar in användaren med angivna uppgifter
       navigate('/min-profil'); // navigerar till användarens profil efter inloggning
-
-    } catch(error) {
+    } catch (err) {
       // hanterar fel vid inloggning
-      setError('Inloggning misslyckades. Kontrollera dina uppgifter och försök igen.');
+      if (err instanceof Yup.ValidationError) {
+        const errors: { email?: string; password?: string } = {};
+        err.inner.forEach((e) => {
+          if (e.path && !errors[e.path as keyof typeof errors]) {
+            errors[e.path as keyof typeof errors] = e.message;
+          }
+        });
+        setValidationErrors(errors);
+      } else {
+        setError('Inloggning misslyckades. Kontrollera dina uppgifter och försök igen.');
+      }
     } finally {
       setLoading(false);
     }
-    
   };
 
   return (
@@ -64,6 +85,7 @@ const LoginPage = () => {
             disabled={loading} // inaktiverar under inloggning
             className="form-input"
           />
+          {validationErrors.email && <p className="error-message">{validationErrors.email}</p>}
 
           {/* Lösenordsfält */}
           <label htmlFor="password">Lösenord</label>
@@ -75,6 +97,7 @@ const LoginPage = () => {
             disabled={loading} // // inaktiverar under inloggning
             className="form-input"
           />
+          {validationErrors.password && <p className="error-message">{validationErrors.password}</p>}
 
           {/* Logga in */}
           <button type="submit" className="loginButton" disabled={loading}>
