@@ -18,7 +18,7 @@ const BookDetailsPage = () => {
 
   // states för laddning, fel, gillningar och meddelande
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [pageError, setPageError] = useState("");
   const [reviewsLoading, setReviewsLoading] = useState(false);
   const [likesLoading, setLikesLoading] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
@@ -33,8 +33,9 @@ const BookDetailsPage = () => {
       if (!res.ok) throw new Error("Något gick fel vid hämtning");
       const data = await res.json();
       setBook(data);
+      setPageError(""); // rensar fel om lyckat
     } catch (err) {
-      setError("Kunde inte hämta bokinformationen.");
+      setPageError("Kunde inte hämta bokinformationen.");
     } finally {
       setLoading(false);
     }
@@ -48,8 +49,10 @@ const BookDetailsPage = () => {
       if (!res.ok) throw new Error("Kunde inte hämta gillningar");
       const data = await res.json();
       setLikesCount(data.likes);
+      setPageError("");
     } catch (err) {
       console.error("Fel vid hämtning av gillningar:", err);
+      setPageError("Kunde inte hämta antal gillningar.");
     } finally {
       setLikesLoading(false);
     }
@@ -64,8 +67,10 @@ const BookDetailsPage = () => {
       const data = await res.json();
       const liked = data.some((like: { bookId: string }) => like.bookId === id); // söker efter matchande bokId
       setHasLiked(liked); // true/false beroende på resultat
+      setPageError("");
     } catch (err) {
       console.error("Kunde inte kontrollera gillning:", err);
+      setPageError("Kunde inte kontrollera om du har gillat denna bok.");
     }
   };
 
@@ -79,8 +84,10 @@ const BookDetailsPage = () => {
       if (!res.ok) throw new Error("Gillning misslyckades.");
       setHasLiked(true); // uppdaterar knappens tillstånd
       getLikesCount(); // uppdaterar antal likes
+      setPageError("");
     } catch (err) {
       console.error("Fel vid gillning:", err);
+      setPageError("Kunde inte gilla boken. Försök igen senare.");
     }
   };
 
@@ -94,8 +101,10 @@ const BookDetailsPage = () => {
       if (!res.ok) throw new Error("Kunde inte ta bort gillning");
       setHasLiked(false); // uppdaterar knappens tillstånd
       getLikesCount(); // uppdateras antal likes
+      setPageError("");
     } catch (err) {
       console.error("Fel vid borttagning av gillning:", err);
+      setPageError("Kunde inte ta bort gillningen. Försök igen senare.");
     }
   };
 
@@ -115,8 +124,10 @@ const BookDetailsPage = () => {
       } else {
         setReviews([]);
       }
+      setPageError("");
     } catch (err) {
       console.error("Fel vid hämtning av recensioner:", err);
+      setPageError("Kunde inte hämta recensioner.");
       setReviews([]);
     } finally {
       setReviewsLoading(false);
@@ -136,7 +147,7 @@ const BookDetailsPage = () => {
 
     // visar laddningsmeddelande eller felmeddelande
     if (loading) return <p style={{ fontStyle: "italic", textAlign: "center" }}>Laddar bokinformation...</p>;
-    if (error || !book) return <p>{error || "Ingen bokinformation hittades."}</p>;
+    if (!book) return <p>{pageError || "Ingen bokinformation hittades."}</p>;
 
     // extraherar volumeInfo från bokobjektet
     const info = book.volumeInfo;
@@ -144,6 +155,9 @@ const BookDetailsPage = () => {
   return (
     <section>
       <h2>{info.title}</h2>
+      {pageError && (
+        <p className="error-message" style={{ marginBottom: "1rem" }}>{pageError}</p>
+      )}
       {/* visar bokomslag om bild finns, annars visas placeholder */}
       <br />
       <div className="bookdetails-top">

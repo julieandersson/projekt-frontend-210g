@@ -12,6 +12,7 @@ const MyProfilePage = () => {
   const [userReviews, setUserReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [likeError, setLikeError] = useState("");
   const [reviewMessage, setReviewMessage] = useState("");
   const [likeMessage, setLikeMessage] = useState("");
 
@@ -24,6 +25,7 @@ const MyProfilePage = () => {
   // funktion för att hämta recensioner skrivna av den inloggade användaren
   const getUserReviews = async () => {
     setLoading(true); // visar laddningsmeddelande
+    setError(""); // rensar ev tidigare felmeddelanden
     try {
       const res = await fetch("https://projekt-api-210g.onrender.com/reviews/user", {
         credentials: "include", // skickar med cookie (jwt)
@@ -41,6 +43,7 @@ const MyProfilePage = () => {
   // hämtar alla böcker som inloggad användare har gillat
   const getUserLikes = async () => {
     setLoadingLikes(true);
+    setLikeError("");
     try {
       const res = await fetch("https://projekt-api-210g.onrender.com/bookLikes/user-likes", {
         credentials: "include",
@@ -50,6 +53,7 @@ const MyProfilePage = () => {
       await getBookDetailsForLikedBooks(data); // hämtar titel + bild för varje gillad bok
     } catch (err) {
       console.error("Fel vid hämtning av gillningar", err);
+      setLikeError("Något gick fel vid hämtning av dina gillningar.");
     } finally {
       setLoadingLikes(false);
     }
@@ -57,6 +61,7 @@ const MyProfilePage = () => {
 
   // tar bort en gillning för specifik bok
   const deleteBookLike = async (bookId: string) => {
+    setLikeMessage("");
     try {
       const res = await fetch(`https://projekt-api-210g.onrender.com/bookLikes/${bookId}`, {
         method: "DELETE",
@@ -69,6 +74,9 @@ const MyProfilePage = () => {
         prev.filter((book) => book.id !== bookId)
       );
       setLikeMessage("Gillning borttagen.");
+      setTimeout(() => {
+      setLikeMessage("");
+    }, 3000);
     } catch (err) {
       console.error(err);
       setError("Fel vid borttagning.");
@@ -77,6 +85,7 @@ const MyProfilePage = () => {
 
   // hämtar titel och bild för varje gillad bok för att visa bokkort
   const getBookDetailsForLikedBooks = async (likes: Like[]) => {
+    setLikeError("");
     try {
       const books = await Promise.all(
         likes.map(async (like) => {
@@ -92,6 +101,7 @@ const MyProfilePage = () => {
       setLikedBooksDetails(books);
     } catch (err) {
       console.error("Fel vid hämtning av bokdetaljer:", err);
+      setLikeError("Något gick fel vid hämtning av bokdetaljer.");
     }
   };
 
@@ -138,6 +148,7 @@ const MyProfilePage = () => {
   
       <section>
         <h2><i className="fa-solid fa-heart"></i> Mina gillade böcker</h2>
+        {likeError && <p className="error">{likeError}</p>}
         <p>
           Har du hittat en bok du gillar eller vill spara för att läsa senare? På varje boksida kan du klicka på hjärtikonen för att gilla boken. Alla dina gillade böcker samlas här nedan så att du enkelt kan hitta tillbaka till dem.
         </p>

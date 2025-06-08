@@ -20,6 +20,7 @@ const RegisterForm = () => {
   const [errors, setErrors] = useState<ErrorsData>({});
   const [loading, setLoading] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
+  const [formError, setFormError] = useState('');
 
   const { register } = useAuth(); // hämtar register-funktionen från AuthContext
   const navigate = useNavigate(); // navigerar till inloggningssidan efter registrering
@@ -59,29 +60,42 @@ const RegisterForm = () => {
       setTimeout(() => {
         navigate('/logga-in');
       }, 5000);
-    } catch (errors) {
-      const validationErrors: ErrorsData = {};
 
+    } catch (error: any) {
       // om det finns valideringsfel, lägg till första felet för varje fält
-      if (errors instanceof Yup.ValidationError) {
-        errors.inner.forEach(error => {
+      if (error instanceof Yup.ValidationError) {
+        const validationErrors: ErrorsData = {};
+        error.inner.forEach(error => {
           const prop = error.path as keyof ErrorsData;
           if (!validationErrors[prop]) {
             validationErrors[prop] = error.message;
           }
         });
         setErrors(validationErrors);
+        setFormError('');
       } else {
-        console.error("Fel vid registrering:", errors);
+        // vid fel av epost, t.ex. om e-postadressen redan finns
+        if (error.message.includes("E-post")) {
+          setErrors(prev => ({
+            ...prev,
+            email: error.message
+          }));
+          setFormError('');
+        } else {
+          // Generell felhantering
+          setFormError('Något gick fel. Försök igen om en stund.');
+        }
       }
       setLoading(false);
-    }
-  };
+    }}
   
   return (
     <div className="register-container">
       <div className="register-box">
         <h2>Skapa konto</h2>
+        {formError && (
+          <div className="error-message">{formError}</div>
+        )}
 
         <form onSubmit={registerForm}>
           {/* visar bekräftelsemeddelande efter lyckad registrering */}

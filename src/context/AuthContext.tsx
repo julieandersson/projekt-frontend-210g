@@ -15,6 +15,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // registrering av ny användare
     const register = async (credentials: RegisterCredentials): Promise<void> => {
         try {
+            console.log("Skickar register-data:", credentials);
+
             const res = await fetch("https://projekt-api-210g.onrender.com/users", {
                 method: "POST",
                 headers: {
@@ -23,17 +25,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 body: JSON.stringify(credentials),
                 credentials: "include"
             });
-    
-            if (!res.ok) throw new Error("Registrering misslyckades");
-    
+
+            if (!res.ok) {
+            const errorData = await res.json().catch(() => null);
+            const errorMsg = errorData?.message || "Registrering misslyckades";
+            throw new Error(errorMsg);
+            }
+
             const data = await res.json() as AuthResponse;
             console.log("Data från registrering: ", data);
-    
+
         } catch (error) {
             console.error("Fel vid registrering: ", error);
-            throw new Error("Fel vid registrering");
+            throw error;
         }
-    }    
+    };
 
     // inloggning av användare
     const login = async (credentials: LoginCredentials): Promise<void> => {
