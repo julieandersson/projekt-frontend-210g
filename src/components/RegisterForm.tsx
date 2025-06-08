@@ -18,6 +18,7 @@ const RegisterForm = () => {
 
   // states för att lagra felmeddelanden och bekräftelsemeddelande
   const [errors, setErrors] = useState<ErrorsData>({});
+  const [loading, setLoading] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
 
   const { register } = useAuth(); // hämtar register-funktionen från AuthContext
@@ -41,6 +42,7 @@ const RegisterForm = () => {
   // funktion som körs när formuläret skickas
   const registerForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // hindrar sidomladdning
+    setLoading(true);
 
     try {
       // validera formuläret enligt valideringsschemat
@@ -72,6 +74,7 @@ const RegisterForm = () => {
       } else {
         console.error("Fel vid registrering:", errors);
       }
+      setLoading(false);
     }
   };
   
@@ -137,7 +140,13 @@ const RegisterForm = () => {
           {errors.password && <p className="error-message">{errors.password}</p>}
 
           {/* Skapa konto */}
-          <button type="submit" className="createButton">Skapa konto</button>
+          <button
+            type="submit"
+            className="createButton"
+            disabled={loading}
+          >
+            {loading ? 'Skapar konto...' : 'Skapa konto'}
+          </button>
         </form>
 
         {/* länk till logga in */}

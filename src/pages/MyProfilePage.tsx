@@ -143,14 +143,15 @@ const MyProfilePage = () => {
         </p>
         {likeMessage && <p className="success">{likeMessage}</p>}
   
-        <div className="liked-books-grid">
-          {loadingLikes ? (
-            <p style={{ fontStyle: "italic", textAlign: "center" }}>Laddar gillade böcker...</p>
-          ) : likedBooksDetails.length === 0 ? (
-            <p style={{ fontStyle: "italic" }}>Du har inte gillat några böcker ännu.</p>
-          ) : (
-            // renderar gillade böcker med bild, titel och "ta bort gillning"-knapp
-            likedBooksDetails.map((book) => (
+        {loadingLikes ? (
+          <p style={{ fontStyle: "italic", textAlign: "center" }}>Laddar gillade böcker...</p>
+        ) : likedBooksDetails.length === 0 ? (
+          <p style={{ fontStyle: "italic" }}>
+            Du har inte gillat några böcker ännu.
+          </p>
+        ) : (
+          <div className="liked-books-grid">
+            {likedBooksDetails.map((book) => (
               <LikedBookItem
                 key={book.id}
                 id={book.id}
@@ -158,9 +159,9 @@ const MyProfilePage = () => {
                 thumbnail={book.thumbnail}
                 onUnlike={deleteBookLike}
               />
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );  
